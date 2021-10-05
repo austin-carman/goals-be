@@ -35,5 +35,7 @@ exports.up = async (knex) => {
 }
 
 exports.down = async (knex) => {
+  await knex.schema.dropTableIfExists("steps")
+  await knex.schema.dropTableIfExists("goals")
   await knex.schema.dropTableIfExists("users")
 }
