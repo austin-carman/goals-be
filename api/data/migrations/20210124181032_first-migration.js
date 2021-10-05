@@ -29,7 +29,7 @@ exports.up = async (knex) => {
         .onDelete("CASCADE")
         .onUpdate("CASCADE")
       steps.string("step_title", 500).notNullable()
-      steps.string("step_notes", 500).notNullable()
+      steps.string("step_notes", 500)
       steps.boolean("step_completed").defaultTo("false")
     })
 }
