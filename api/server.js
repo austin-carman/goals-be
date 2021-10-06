@@ -27,6 +27,11 @@ server.get("/", (req, res) => {
   res.status(200).json("api up")
 })
 
+server.get('*', (req, res) => {
+  res.status(404).json({
+    message: "not found"
+  })
+})
 
 // don't need in server
 // server.get('/api/users', async (req, res) => {
