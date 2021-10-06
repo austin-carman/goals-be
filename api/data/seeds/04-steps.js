@@ -1,13 +1,22 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('table_name').del()
+  return knex('steps').del()
     .then(function () {
       // Inserts seed entries
-      return knex('table_name').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
+      return knex('steps').insert([
+        {
+          step_id: 1, 
+          goal_id: 1,
+          step_title: "Pick 12 books to read",
+          step_completed: true
+        },
+        {
+          step_id: 2, 
+          goal_id: 1,
+          step_title: "Read 1 book this month",
+          step_notes: "Read 30 minutes/day"
+        },
       ]);
     });
 };
