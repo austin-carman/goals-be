@@ -2,9 +2,9 @@ const router = require("express").Router();
 const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 const tokenBuilder = require("../utils/token-builder");
-const { validateBody } = require("../middleware/auth-middleware");
+const { validateBody, checkUsernameExists } = require("../middleware/auth-middleware");
 
-router.post("/login", validateBody, (req, res, next) => { // logic here should be in middleware
+router.post("/login", validateBody, checkUsernameExists, (req, res, next) => { // logic here should be in middleware
     res.json("/login is wired")
 });
 
