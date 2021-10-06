@@ -4,8 +4,11 @@ const bcrypt = require("bcryptjs");
 const tokenBuilder = require("../utils/token-builder");
 const { validateBody, checkUsernameExists } = require("../middleware/auth-middleware");
 
-router.post("/login", validateBody, checkUsernameExists, (req, res, next) => { // logic here should be in middleware
-    res.json("/login is wired")
+// needs formatting -> check why formatting files are not working
+// logic here should be in middleware
+router.post("/login", validateBody, checkUsernameExists, (req, res, next) => { 
+    const currentUser = req.user;
+    res.json(currentUser.first_name);
 });
 
 router.get("/", (req, res, next) => {
