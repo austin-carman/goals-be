@@ -33,6 +33,15 @@ server.get('*', (req, res) => {
   })
 })
 
+// Error Handler
+server.use((err, req, res, next) => {
+  res.json({
+    status: 500,
+    message: err.message,
+    error: err.stack
+  })
+})
+
 // don't need in server
 // server.get('/api/users', async (req, res) => {
 //   res.json(await getAllUsers())
