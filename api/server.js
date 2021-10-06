@@ -21,7 +21,11 @@ server.use(express.json())
 server.use(helmet())
 server.use(cors())
 
-// Route base URL here
+// Routes' base URL will go here
+
+server.get("/", (req, res) => {
+  res.status(200).json("api up")
+})
 
 
 // don't need in server
