@@ -1,7 +1,9 @@
 const db = require("../../data/db-config");
 
 async function findUserBy(filter) {
-    console.log("model is connected");
+    const [user] = await db("users")
+        .where(filter);
+    return user;
 };
 
 module.exports = {
