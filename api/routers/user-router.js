@@ -3,8 +3,8 @@ const User = require("../models/user-model");
 const tokenBuilder = require("../utils/token-builder");
 const { validateBody, validateUsername, validatePassword } = require("../middleware/auth-middleware");
 
-// logic here should be in middleware
-router.post("/login", validateBody, validateUsername, validatePassword, (req, res, next) => {
+// Endpoint for existing user login
+router.post("/login", validateBody, validateUsername, validatePassword, (req, res, next) => { // eslint-disable-line no-unused-vars
   const token = tokenBuilder(req.user);
   res.status(200).json({
     message: `Welcome back ${req.user.first_name}!`,

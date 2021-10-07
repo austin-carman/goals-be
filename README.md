@@ -28,6 +28,21 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - **test**: Runs tests.
 - **deploy**: Deploys the main branch to Heroku.
 
+## API Endpoint Documentation
+### User
+#### Login for existing user.
+[POST] /api/user/login
+Parameter: none
+Request body: {username: "username", password: "password"}
+  - Required: username, password
+Response: 
+  {
+    message: Welcome back (user's first name)!,
+    username: (user's username),
+    userId: (user's user_id),
+    token: (token for authentication)
+  }
+
 **The following scripts NEED TO BE EDITED before using: replace `YOUR_HEROKU_APP_NAME`**
 
 - **migrateh**: Migrates the Heroku database to the latest.
