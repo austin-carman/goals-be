@@ -18,7 +18,13 @@ router.post("/login", validateBody, validateUsername, validatePassword, (req, re
 
 // Endpoint for new user registration
 router.post("/register", validateBody, isUsernameTaken, (req, res, next) => {
-  res.json("wired");
+  const { first_name, last_name, username, password } = req.body;
+  const hash = bcrypt.hashSync(password, 8);
+  User.createUser({ first_name, last_name, username, password: hash })
+    .then(newUser => {
+      res.status(201).json(newUser);
+    })
+    .catch(next);
 });
 
 router.get("/", (req, res, next) => {

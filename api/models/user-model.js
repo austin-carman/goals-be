@@ -6,12 +6,12 @@ async function findUserBy(filter) {
   return user;
 }
 
-async function createUser({username, password}) {
+async function createUser({ first_name, last_name, username, password }) {
   const newUser = await db.transaction(async trx => {
     const [result] = await trx("users")
       .insert(
-        { username, password }, 
-        ["user_id", "username", "password"]
+        { first_name, last_name, username, password }, 
+        ["user_id", "first_name", "last_name", "username", "password"]
       );
     return result;
   });
