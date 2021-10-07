@@ -43,8 +43,22 @@ const validatePassword = (req, res, next) => {
   }
 };
 
+const isUsernameTaken = async (req, res, next) => {
+  const { username } = req.body;
+  const user = await User.findUserBy({username});
+  if (!user) {
+    next();
+  } else {
+    next({
+      status: 403,
+      message: `Username, ${username}, already exists.`
+    });
+  }
+};
+
 module.exports = {
   validateBody,
   validateUsername,
   validatePassword,
+  isUsernameTaken,
 };
