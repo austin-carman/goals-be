@@ -2,16 +2,18 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 
-// Routers go here
+// Routers
 const userRouter = require("./routers/user-router");
+// const goalsRouter = require("./routers/goals-router");
 
 const server = express();
 server.use(express.json());
 server.use(helmet());
 server.use(cors());
 
-// Routes' base URL will go here
+// Routes
 server.use("/api/user", userRouter);
+// server.use("/api/goals", goalsRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json("api up");
