@@ -1,6 +1,7 @@
 const User = require("../models/user-model");
+const bcrypt = require("bcryptjs");
 
-const validateBody = (req, res, next) => {
+const validateBody = (req, res, next) => { // todo: username/password length, sanitize(e.g. white spaces)
   const { username, password } = req.body;
   if (!username || !password) {
     next({
@@ -12,10 +13,10 @@ const validateBody = (req, res, next) => {
   }
 };
 
-const checkUsernameExists = async (req, res, next) => {
+const validateUsername = async (req, res, next) => {
   const { username } = req.body;
   try {
-    const user = await User.findUserBy({username})
+    const user = await User.findUserBy({username});
     if (!user) { // is ! really the best way to check???
       res.json({
         status: 401,
@@ -31,7 +32,19 @@ const checkUsernameExists = async (req, res, next) => {
   }
 };
 
+const validatePassword = (req, res, next) => {
+  if (bcrypt.compareSync(req.body.password, req.user.password)) {
+    next();
+  } else {
+    next({ 
+      status: 401, 
+      message: "Invalid username or password" 
+    });
+  }
+};
+
 module.exports = {
   validateBody,
-  checkUsernameExists,
+  validateUsername,
+  validatePassword,
 };
