@@ -4,7 +4,7 @@ const cors = require("cors");
 
 // Routers
 const userRouter = require("./routers/user-router");
-// const goalsRouter = require("./routers/goals-router");
+const goalsRouter = require("./routers/goals-router");
 
 const server = express();
 server.use(express.json());
@@ -13,7 +13,7 @@ server.use(cors());
 
 // Routes
 server.use("/api/user", userRouter);
-// server.use("/api/goals", goalsRouter);
+server.use("/api/goals", goalsRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json("api up");
