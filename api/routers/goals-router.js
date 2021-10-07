@@ -1,7 +1,12 @@
 const router = require("express").Router();
+const Goals = require("../models/goals-model");
 
-router.get("/", (req, res, next) => {
-  res.json("wired");
+router.get("/:user_id", (req, res, next) => {
+  Goals.userGoals(1)
+    .then(goals => {
+      res.json(goals);
+    })
+    .catch(err => console.log(err));
 });
 
 module.exports = router;
