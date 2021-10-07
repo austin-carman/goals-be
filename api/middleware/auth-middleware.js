@@ -1,5 +1,6 @@
 const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const validateBody = (req, res, next) => { // todo: username/password length, sanitize(e.g. white spaces)
   const { username, password } = req.body;
@@ -57,7 +58,19 @@ const isUsernameTaken = async (req, res, next) => {
 };
 
 const restricted = (req, res, next) => {
-  console.log("middleware");
+  const token = req.headers.authorization;
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(401).json({ message: "Not authorized. Invalid token." });
+      } else {
+        req.decodedJwt = decoded;
+        next();
+      }
+    });
+  } else {
+    res.status(401).json({ message: "Must be logged in. Token required" });
+  }
 };
 
 module.exports = {
