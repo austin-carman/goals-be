@@ -14,6 +14,11 @@ router.post("/login", validateBody, validateUsername, validatePassword, (req, re
   });
 });
 
+// Endpoint for new user registration
+router.post("/register", (req, res, next) => { // need to add middleware
+  res.json("wired");
+});
+
 router.get("/", (req, res, next) => {
   const filter = { user_id: 1 };
   User.findUserBy(filter)
