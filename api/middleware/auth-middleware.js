@@ -56,9 +56,14 @@ const isUsernameTaken = async (req, res, next) => {
   }
 };
 
+const restricted = (req, res, next) => {
+  console.log("middleware");
+};
+
 module.exports = {
   validateBody,
   validateUsername,
   validatePassword,
   isUsernameTaken,
+  restricted,
 };

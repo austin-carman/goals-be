@@ -2,7 +2,13 @@ const router = require("express").Router();
 const User = require("../models/user-model");
 const tokenBuilder = require("../utils/token-builder");
 const bcrypt = require("bcryptjs");
-const { validateBody, validateUsername, validatePassword, isUsernameTaken } = require("../middleware/auth-middleware");
+const { 
+  validateBody, 
+  validateUsername, 
+  validatePassword, 
+  isUsernameTaken,
+  restricted,
+} = require("../middleware/auth-middleware");
 
 // Login for existing user
 // eslint-disable-next-line no-unused-vars
@@ -28,7 +34,7 @@ router.post("/register", validateBody, isUsernameTaken, (req, res, next) => {
 });
 
 // Editing user information
-router.put("/edit-profile", (req, res, next) => {
+router.put("/edit-profile", restricted, (req, res, next) => {
   res.json("wired");
 });
 
