@@ -56,15 +56,9 @@ const isUsernameTaken = async (req, res, next) => {
   }
 };
 
-const createNewUser = async (req, res, next) => {
-  console.log("middleware reached");
-  next();
-};
-
 module.exports = {
   validateBody,
   validateUsername,
   validatePassword,
   isUsernameTaken,
-  createNewUser
 };

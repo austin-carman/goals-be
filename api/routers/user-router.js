@@ -1,10 +1,12 @@
 const router = require("express").Router();
 const User = require("../models/user-model");
 const tokenBuilder = require("../utils/token-builder");
-const { validateBody, validateUsername, validatePassword, isUsernameTaken, createNewUser } = require("../middleware/auth-middleware");
+const bcrypt = require("bcryptjs");
+const { validateBody, validateUsername, validatePassword, isUsernameTaken } = require("../middleware/auth-middleware");
 
 // Endpoint for existing user login
-router.post("/login", validateBody, validateUsername, validatePassword, (req, res, next) => { // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+router.post("/login", validateBody, validateUsername, validatePassword, (req, res, next) => { 
   const token = tokenBuilder(req.user);
   res.status(200).json({
     message: `Welcome back ${req.user.first_name}!`,
@@ -15,7 +17,7 @@ router.post("/login", validateBody, validateUsername, validatePassword, (req, re
 });
 
 // Endpoint for new user registration
-router.post("/register", validateBody, isUsernameTaken, createNewUser, (req, res, next) => { // need to add middleware
+router.post("/register", validateBody, isUsernameTaken, (req, res, next) => {
   res.json("wired");
 });
 
