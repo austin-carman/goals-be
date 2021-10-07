@@ -43,8 +43,14 @@ const validatePassword = (req, res, next) => {
   }
 };
 
+const isUsernameTaken = async (req, res, next) => {
+  console.log("reached middleware");
+  next();
+};
+
 module.exports = {
   validateBody,
   validateUsername,
   validatePassword,
+  isUsernameTaken,
 };
