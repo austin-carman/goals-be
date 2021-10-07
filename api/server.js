@@ -1,6 +1,6 @@
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
+const express = require("express");
+const helmet = require("helmet");
+const cors = require("cors");
 
 // Routers go here
 const userRouter = require("./routers/user-router");
@@ -17,14 +17,14 @@ server.get("/", (req, res) => {
   res.status(200).json("api up");
 });
 
-server.get('*', (req, res) => {
+server.get("*", (req, res) => {
   res.status(404).json({
     message: "not found"
   });
 });
 
 // Error Handler
-server.use((err, req, res, next) => {
+server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   res.json({
     status: 500,
     message: err.message,

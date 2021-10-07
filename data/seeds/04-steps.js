@@ -1,10 +1,10 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('steps').del()
+  return knex("steps").del()
     .then(function () {
       // Inserts seed entries
-      return knex('steps').insert([
+      return knex("steps").insert([
         {
           step_id: 1, 
           goal_id: 1,

@@ -6,19 +6,18 @@ const { validateBody, checkUsernameExists } = require("../middleware/auth-middle
 
 // needs formatting -> check why formatting files are not working
 // logic here should be in middleware
-router.post("/login", validateBody, checkUsernameExists, (req, res, next) => { 
-    const currentUser = req.user;
-    res.json(currentUser.first_name);
+router.post("/login", validateBody, checkUsernameExists, (req, res, next) => {
+  const currentUser = req.user;
+  res.json(currentUser.first_name);
 });
 
 router.get("/", (req, res, next) => {
-    const filter = { user_id: 1 };
-    User.findUserBy(filter)
-        .then(currentUser => {
-            res.status(200).json({currentUser})
+  const filter = { user_id: 1 };
+  User.findUserBy(filter)
+    .then(currentUser => {
+      res.status(200).json({currentUser});
+    })
+    .catch(err => console.log("error: ", err));
+});
 
-        })
-        .catch(err => console.log("error: ", err));
-})
-
-module.exports = router
+module.exports = router;

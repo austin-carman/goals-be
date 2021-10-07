@@ -1,16 +1,16 @@
-require('dotenv').config()
+require("dotenv").config();
 
-const pg = require('pg')
+const pg = require("pg");
 
 if (process.env.DATABASE_URL) {
-  pg.defaults.ssl = { rejectUnauthorized: false }
+  pg.defaults.ssl = { rejectUnauthorized: false };
 }
 
 const sharedConfig = {
-  client: 'pg',
-  migrations: { directory: './data/migrations' },
-  seeds: { directory: './data/seeds' },
-}
+  client: "pg",
+  migrations: { directory: "./data/migrations" },
+  seeds: { directory: "./data/seeds" },
+};
 
 module.exports = {
   development: {
@@ -26,4 +26,4 @@ module.exports = {
     connection: process.env.DATABASE_URL,
     pool: { min: 2, max: 10 },
   },
-}
+};
