@@ -1,4 +1,5 @@
 const db = require("../../data/db-config");
+const { removeArrDuplicateItems } = require("../helper-functions/helper-functions");
 
 async function getUserGoals(user_id) {
   const data = await db("goals as g")
@@ -14,13 +15,6 @@ async function getUserGoals(user_id) {
       "s.step_completed"
     )
     .where("g.user_id", user_id);
-
-  const removeArrDuplicateItems = (arr) => {// move to helper function file?
-    const jsonObj = arr.map(JSON.stringify);
-    const uniqueSet = new Set(jsonObj);
-    const uniqueArr = Array.from(uniqueSet).map(JSON.parse);
-    return uniqueArr;
-  };
 
   const steps = data.map(goal => { // all steps for all goals
     return {
@@ -39,7 +33,7 @@ async function getUserGoals(user_id) {
     return allSteps;
   };
 
-  const goals = data.map(goal => {
+  const goals = data.map(goal => { // all goals with steps for that goal
     return {
       goal_id: goal.goal_id,
       user_id: goal.user_id,
@@ -49,7 +43,14 @@ async function getUserGoals(user_id) {
     };
   });
 
-  const userGoals = removeArrDuplicateItems(goals);
+  const userGoals = removeArrDuplicateItems(goals); 
+  /*
+    This ^^^ is a temporary fix:
+    Removes duplicate goals due to a new goal obj created 
+    for each step in that goal. Problem may arise from
+    .select() in db call. Find a better way to fix this 
+    issue.
+  */
 
   return userGoals;
 }
