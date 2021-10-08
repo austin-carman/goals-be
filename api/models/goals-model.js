@@ -15,7 +15,7 @@ async function userGoals(user_id) {
     )
     .where("g.user_id", user_id);
 
-  const steps = goals.map(goal => {
+  const steps = goals.map(goal => { // all steps for all goals
     return {
       step_id: goal.step_id,
       step_title: goal.step_title,
@@ -25,7 +25,7 @@ async function userGoals(user_id) {
     };
   });
 
-  const sharedGoal = (goalId) => {
+  const sharedGoal = (goalId) => { // all steps for a single goal
     const allSteps = steps.filter(obj => {
       return obj.goal_id === goalId;
     });
@@ -34,7 +34,7 @@ async function userGoals(user_id) {
 
   const uniqueGoals = {};
 
-  const userGoals = goals.map(goal => {
+  const userGoals = goals.map(goal => { // no duplicate goals. Restructures data and includes steps for that goal only
     if (!(goal.goal_id in uniqueGoals)) {
       uniqueGoals[goal.goal_id] = true;
 
