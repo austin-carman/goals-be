@@ -19,4 +19,9 @@ router.post("/new-goal/:user_id", (req, res, next) => {
     .catch(err => console.log(err));
 });
 
+// Edit existing goal
+router.put("/edit/:goal_id", (req, res, next) => {
+  res.json("wired");
+});
+
 module.exports = router;
