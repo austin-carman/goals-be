@@ -51,6 +51,7 @@ async function userGoals(user_id) {
   return userGoals;
 }
 
+// Create new goal for specified user
 async function newGoal(user_id, goal) {
   const { goal_title, steps } = goal;
   const [addedGoal] = await db("goals")

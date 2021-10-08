@@ -28,13 +28,21 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - **test**: Runs tests.
 - **deploy**: Deploys the main branch to Heroku.
 
+## TODO NOTES:
+- creating a new step: right now step_title is required. What if the user wants to create a new goal without creating any steps for it? Maybe change step_title to not_nullable?
+
 ## API Endpoint Documentation
+
 ### User
 #### Login for existing user.
 [POST] /api/user/login
 Parameter: none
-Request body: {username: "username", password: "password"}
-  - Required: username, password
+Request body: 
+  {
+    username: "sting", 
+    password: "sting"
+  }
+  - Required: all
 Response: 
   {
     message: Welcome back (user's first name)!,
@@ -42,6 +50,59 @@ Response:
     userId: (user's user_id),
     token: (token for authentication)
   }
+
+#### Register for new user.
+[POST] /api/user/register
+Parameter: none
+Request body: 
+  {
+    first_name: "string", 
+    last_name: "string:, 
+    username: "string", 
+    password: "string"
+  }
+  - Required: all
+Response: 
+  {
+    "user_id": 3,
+    "first_name": "John",
+    "last_name": "Doe",
+    "username": "JD"
+  }
+
+### Goals
+#### Create new goal for specified user
+[POST] /api/goals/new-goal/:user_id
+Parameter: user_id
+Request body: 
+{
+    "user_id": integer,
+    "goal_title": "string",
+    "steps": [
+        {
+            "step_title": "string",
+            "step_notes": "string"
+        }
+    ]
+    
+}
+  - Required: user_id, goal_title, step_title (required for each step object in list)
+  - Optional: step_notes. May include list of step objects.
+Response: 
+{
+    "goal_id": 4,
+    "user_id": 1,
+    "goal_title": "My new Goal",
+    "goal_completed": false,
+    "steps": {
+        "step_id": 4,
+        "goal_id": 4,
+        "step_title": "Step #1",
+        "step_notes": "This is your first step",
+        "step_completed": false
+    }
+}
+  - goal_completed, step_completed are false by default. Can be updated to true in edit goal endpoint.
 
 **The following scripts NEED TO BE EDITED before using: replace `YOUR_HEROKU_APP_NAME`**
 

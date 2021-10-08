@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Goals = require("../models/goals-model");
 
+// Get all goals for specified user
 router.get("/:user_id", (req, res, next) => {
   Goals.userGoals(1)
     .then(goals => {
@@ -9,6 +10,7 @@ router.get("/:user_id", (req, res, next) => {
     .catch(err => console.log(err));
 });
 
+// Create a new goal for specified user
 router.post("/new-goal/:user_id", (req, res, next) => {
   Goals.newGoal(req.params.user_id, req.body)
     .then(goal => {
