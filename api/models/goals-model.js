@@ -1,7 +1,7 @@
 const db = require("../../data/db-config");
 
 async function userGoals(user_id) {
-  const goals = await db("goals as g")
+  const data = await db("goals as g")
     .leftJoin("steps as s", "g.goal_id", "=", "s.goal_id")
     .select(
       "g.goal_id", 
@@ -15,7 +15,14 @@ async function userGoals(user_id) {
     )
     .where("g.user_id", user_id);
 
-  const steps = goals.map(goal => { // all steps for all goals
+  const removeArrDuplicateItems = (arr) => {// move to helper function file?
+    const jsonObj = arr.map(JSON.stringify);
+    const uniqueSet = new Set(jsonObj);
+    const uniqueArr = Array.from(uniqueSet).map(JSON.parse);
+    return uniqueArr;
+  };
+
+  const steps = data.map(goal => { // all steps for all goals
     return {
       step_id: goal.step_id,
       step_title: goal.step_title,
@@ -32,21 +39,17 @@ async function userGoals(user_id) {
     return allSteps;
   };
 
-  const uniqueGoals = {};
-
-  const userGoals = goals.map(goal => { // no duplicate goals. Restructures data and includes steps for that goal only
-    if (!(goal.goal_id in uniqueGoals)) {
-      uniqueGoals[goal.goal_id] = true;
-
-      return {
-        goal_id: goal.goal_id,
-        user_id: goal.user_id,
-        goal_title: goal.goal_title,
-        goal_completed: goal.goal_completed,
-        steps: sharedGoal(goal.goal_id)
-      };
-    } 
+  const goals = data.map(goal => {
+    return {
+      goal_id: goal.goal_id,
+      user_id: goal.user_id,
+      goal_title: goal.goal_title,
+      goal_completed: goal.goal_completed,
+      steps: sharedGoal(goal.goal_id)
+    };
   });
+
+  const userGoals = removeArrDuplicateItems(goals);
 
   return userGoals;
 }
