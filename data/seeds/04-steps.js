@@ -17,6 +17,11 @@ exports.seed = function(knex) {
           step_title: "Read 1 book this month",
           step_notes: "Read 30 minutes/day"
         },
+        {
+          step_id: 3, 
+          goal_id: 2,
+          step_title: "Create a budget",
+        },
       ]);
     });
 };

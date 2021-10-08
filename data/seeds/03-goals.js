@@ -10,6 +10,11 @@ exports.seed = function(knex) {
           user_id: 1, 
           goal_title: "Read 12 books this year",
         },
+        {
+          goal_id: 2, 
+          user_id: 1, 
+          goal_title: "Save $1000",
+        },
       ]);
     });
 };
