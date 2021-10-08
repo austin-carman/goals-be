@@ -6,19 +6,16 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex("steps").insert([
         {
-          step_id: 1, 
           goal_id: 1,
           step_title: "Pick 12 books to read",
           step_completed: true
         },
         {
-          step_id: 2, 
           goal_id: 1,
           step_title: "Read 1 book this month",
           step_notes: "Read 30 minutes/day"
         },
         {
-          step_id: 3, 
           goal_id: 2,
           step_title: "Create a budget",
         },

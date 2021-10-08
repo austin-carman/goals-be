@@ -55,8 +55,8 @@ async function newGoal(user_id, goal) {
   const { goal_title, steps } = goal;
   const [addedGoal] = await db("goals")
     .insert({
-      user_id,
-      goal_title
+      user_id: user_id,
+      goal_title: goal_title
     },
     [
       "goal_id",

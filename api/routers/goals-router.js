@@ -10,7 +10,11 @@ router.get("/:user_id", (req, res, next) => {
 });
 
 router.post("/new-goal/:user_id", (req, res, next) => {
-  res.json("wired");
+  Goals.newGoal(req.params.user_id, req.body)
+    .then(goal => {
+      res.json(goal);
+    })
+    .catch(err => console.log(err));
 });
 
 module.exports = router;
