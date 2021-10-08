@@ -3,7 +3,7 @@ const Goals = require("../models/goals-model");
 
 // Get all goals for specified user
 router.get("/:user_id", (req, res, next) => {
-  Goals.userGoals(1)
+  Goals.getUserGoals(1)
     .then(goals => {
       res.json(goals);
     })

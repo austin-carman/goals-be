@@ -1,6 +1,6 @@
 const db = require("../../data/db-config");
 
-async function userGoals(user_id) {
+async function getUserGoals(user_id) {
   const data = await db("goals as g")
     .leftJoin("steps as s", "g.goal_id", "=", "s.goal_id")
     .select(
@@ -97,6 +97,6 @@ async function newGoal(user_id, goal) {
 }
 
 module.exports = {
-  userGoals,
+  getUserGoals,
   newGoal
 };
