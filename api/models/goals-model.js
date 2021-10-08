@@ -51,6 +51,48 @@ async function userGoals(user_id) {
   return userGoals;
 }
 
+async function newGoal(user_id, goal) {
+  const { goal_title, steps } = goal;
+  const [addedGoal] = await db("goals")
+    .insert({
+      user_id,
+      goal_title
+    },
+    [
+      "goal_id",
+      "user_id",
+      "goal_title",
+      "goal_completed"
+    ]);
+  
+  const newSteps = steps.map(step => {
+    return {...step, goal_id: addedGoal.goal_id};
+  });
+
+  const [addedSteps] = await db("steps")
+    .insert(
+      newSteps, 
+      [
+        "step_id", 
+        "goal_id",
+        "step_title",
+        "step_notes",
+        "step_completed"
+      ]
+    );
+
+  const userGoal = {
+    goal_id: addedGoal.goal_id,
+    user_id: addedGoal.user_id,
+    goal_title: addedGoal.goal_title,
+    goal_completed: addedGoal.goal_completed,
+    steps: addedSteps
+  };
+
+  return userGoal;
+}
+
 module.exports = {
   userGoals,
+  newGoal
 };
