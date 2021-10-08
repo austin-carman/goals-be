@@ -11,7 +11,7 @@ async function createUser({ first_name, last_name, username, password }) {
     const [result] = await trx("users")
       .insert(
         { first_name, last_name, username, password }, 
-        ["user_id", "first_name", "last_name", "username", "password"]
+        ["user_id", "first_name", "last_name", "username"]
       );
     return result;
   });

@@ -4,7 +4,7 @@ const tokenBuilder = require("../utils/token-builder");
 const bcrypt = require("bcryptjs");
 const { validateBody, validateUsername, validatePassword, isUsernameTaken } = require("../middleware/auth-middleware");
 
-// Endpoint for existing user login
+// Existing user login
 // eslint-disable-next-line no-unused-vars
 router.post("/login", validateBody, validateUsername, validatePassword, (req, res, next) => { 
   const token = tokenBuilder(req.user);
@@ -16,7 +16,7 @@ router.post("/login", validateBody, validateUsername, validatePassword, (req, re
   });
 });
 
-// Endpoint for new user registration
+// New user registration
 router.post("/register", validateBody, isUsernameTaken, (req, res, next) => {
   const { first_name, last_name, username, password } = req.body;
   const hash = bcrypt.hashSync(password, 8);
