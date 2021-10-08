@@ -30,6 +30,8 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 
 ## TODO NOTES:
 - creating a new step: right now step_title is required. What if the user wants to create a new goal without creating any steps for it? Maybe change step_title to not_nullable?
+- Consider adding time created for a new goal/steps
+- Find a better way to structure the return for get user goals(goals-model)
 
 ## API Endpoint Documentation
 
