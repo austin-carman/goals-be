@@ -122,7 +122,28 @@ async function editGoal(goal_id, goal) {
     updatedSteps.push(editedStep);
   }));
 
-  return updatedSteps;
+  const [editedGoal] = await db("goals")
+    .where("goal_id", goal_id)
+    .update({
+      goal_title: goal_title,
+      goal_completed: goal_completed
+    }, 
+    [
+      "goal_id",
+      "user_id",
+      "goal_title",
+      "goal_completed"
+    ]);
+
+  const updatedGoal = {
+    goal_id: editedGoal.goal_id,
+    user_id: editedGoal.user_id,
+    goal_title: editedGoal.goal_title,
+    goal_completed: editedGoal.goal_completed,
+    steps: updatedSteps
+  };
+
+  return updatedGoal;
 }
 
 module.exports = {
