@@ -102,26 +102,24 @@ async function newGoal(user_id, goal) {
 async function editGoal(goal_id, goal) {
   const { goal_title, goal_completed, steps } = goal;
   const updatedSteps = [];
-  
-  if (steps) {
-    await Promise.all(steps.map(async step => {
-      const [editedStep] = await db("steps")
-        .where("step_id", step.step_id)
-        .update({
-          step_title: step.step_title,
-          step_notes: step.step_notes,
-          step_completed: step.step_completed
-        },
-        [
-          "step_id",
-          "goal_id",
-          "step_title",
-          "step_notes",
-          "step_completed"
-        ]);
-      updatedSteps.push(editedStep);
-    }));
-  }
+
+  await Promise.all(steps.map(async step => {
+    const [editedStep] = await db("steps")
+      .where("step_id", step.step_id)
+      .update({
+        step_title: step.step_title,
+        step_notes: step.step_notes,
+        step_completed: step.step_completed
+      },
+      [
+        "step_id",
+        "goal_id",
+        "step_title",
+        "step_notes",
+        "step_completed"
+      ]);
+    updatedSteps.push(editedStep);
+  }));
 
   const [editedGoal] = await db("goals")
     .where("goal_id", goal_id)
