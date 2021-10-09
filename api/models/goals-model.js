@@ -1,6 +1,7 @@
 const db = require("../../data/db-config");
 const { removeArrDuplicateItems } = require("../helper-functions/helper-functions");
 
+// ** All goals for specified user **
 async function getUserGoals(user_id) {
   const data = await db("goals as g")
     .leftJoin("steps as s", "g.goal_id", "=", "s.goal_id")
@@ -55,7 +56,7 @@ async function getUserGoals(user_id) {
   return userGoals;
 }
 
-// Create new goal for specified user
+// ** Create new goal for specified user **
 async function newGoal(user_id, goal) {
   const { goal_title, steps } = goal;
   const [addedGoal] = await db("goals")
@@ -97,7 +98,35 @@ async function newGoal(user_id, goal) {
   return userGoal;
 }
 
+// ** Edit specified goal **
+async function editGoal(goal_id, goal) {
+  const { goal_title, goal_completed, steps } = goal;
+
+  const updatedSteps = [];
+
+  await Promise.all(steps.map(async step => {
+    const [editedStep] = await db("steps")
+      .where("step_id", step.step_id)
+      .update({
+        step_title: step.step_title,
+        step_notes: step.step_notes,
+        step_completed: step.step_completed
+      },
+      [
+        "step_id",
+        "goal_id",
+        "step_title",
+        "step_notes",
+        "step_completed"
+      ]);
+    updatedSteps.push(editedStep);
+  }));
+
+  return updatedSteps;
+}
+
 module.exports = {
   getUserGoals,
-  newGoal
+  newGoal,
+  editGoal,
 };
