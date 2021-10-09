@@ -101,7 +101,6 @@ async function newGoal(user_id, goal) {
 // ** Edit specified goal **
 async function editGoal(goal_id, goal) {
   const { goal_title, goal_completed, steps } = goal;
-
   const updatedSteps = [];
 
   await Promise.all(steps.map(async step => {
