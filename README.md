@@ -151,6 +151,63 @@ Response:
 }
   - goal_completed, step_completed are false by default. Can be updated to true in edit goal endpoint.
 
+#### Edit specified goal and/or it's steps
+[PUT] /api/goals/edit/:goal_id
+Parameter: goal_id
+Request body: 
+[
+  {
+    "goal_id": 1,
+    "user_goal": 1,
+    "goal_title": "Read 12 books this year",
+    "goal_completed": false,
+    "steps": [
+      {
+        "step_id": 1,
+        "step_title": "Pick 12 books to read",
+        "step_notes": null,
+        "step_completed": true,
+        "goal_id": 1
+      },
+      {
+        "step_id": 2,
+        "step_title": "Read 1 book this month",
+        "step_notes": "Read 30 minutes/day",
+        "step_completed": false,
+        "goal_id": 1
+      }
+    ]
+  }
+]
+  - Required:
+  - Optional:
+
+Response: 
+[
+  {
+    "goal_id": 1,
+    "user_id": 1,
+    "goal_title": "Read 12 books this year",
+    "goal_completed": false,
+    "steps": [
+      {
+        "step_id": 1,
+        "step_title": "Pick 12 books to read",
+        "step_notes": null,
+        "step_completed": true,
+        "goal_id": 1
+      },
+      {
+        "step_id": 2,
+        "step_title": "Read 1 book this month",
+        "step_notes": "Read 30 minutes/day",
+        "step_completed": false,
+        "goal_id": 1
+      }
+    ]
+  }
+]
+
 **The following scripts NEED TO BE EDITED before using: replace `YOUR_HEROKU_APP_NAME`**
 
 - **migrateh**: Migrates the Heroku database to the latest.
