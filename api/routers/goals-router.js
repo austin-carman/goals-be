@@ -28,4 +28,8 @@ router.put("/edit/:goal_id", (req, res, next) => {
     .catch(err => console.log(err));
 });
 
+router.delete('/delete/:goal_id', (req, res, next) => {
+  console.log("wired");
+});
+
 module.exports = router;
