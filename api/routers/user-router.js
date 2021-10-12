@@ -27,13 +27,4 @@ router.post("/register", validateBody, isUsernameTaken, (req, res, next) => {
     .catch(next);
 });
 
-router.get("/", (req, res, next) => {
-  const filter = { user_id: 1 };
-  User.findUserBy(filter)
-    .then(currentUser => {
-      res.status(200).json({currentUser});
-    })
-    .catch(err => console.log("error: ", err));
-});
-
 module.exports = router;
