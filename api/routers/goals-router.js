@@ -28,12 +28,17 @@ router.put("/edit/:goal_id", (req, res, next) => {
     .catch(err => console.log(err));
 });
 
-router.delete("/delete/:goal_id", (req, res, next) => {
+router.delete("/delete-goal/:goal_id", (req, res, next) => {
   Goals.deleteGoal(req.params.goal_id)
     .then(deleted => {
       res.status(200).json(deleted);
     })
     .catch(err => console.log(err));
 });
+
+router.delete("/delete-step/:step_id", (req, res, next) => {
+  res.json("wired");
+});
+
 
 module.exports = router;
