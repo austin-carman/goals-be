@@ -100,49 +100,55 @@ async function newGoal(user_id, goal) {
 
 // ** Edit specified goal **
 async function editGoal(goal_id, goal) {
-  const { goal_title, goal_completed, steps } = goal;
   const updatedSteps = [];
+  if (goal.steps) {
+    const { steps } = goal;
+    await Promise.all(steps.map(async step => {
+      const [editedStep] = await db("steps")
+        .where("step_id", step.step_id)
+        .update({
+          step_title: step.step_title,
+          step_notes: step.step_notes,
+          step_completed: step.step_completed
+        },
+        [
+          "step_id",
+          "goal_id",
+          "step_title",
+          "step_notes",
+          "step_completed"
+        ]);
+      updatedSteps.push(editedStep);
+    }));
+  }
 
-  await Promise.all(steps.map(async step => {
-    const [editedStep] = await db("steps")
-      .where("step_id", step.step_id)
+  let updatedGoal = {};
+  if (goal.goal_title || goal.goal_completed) {
+    const { goal_title, goal_completed } = goal;
+    const [editedGoal] = await db("goals")
+      .where("goal_id", goal_id)
       .update({
-        step_title: step.step_title,
-        step_notes: step.step_notes,
-        step_completed: step.step_completed
-      },
+        goal_title: goal_title,
+        goal_completed: goal_completed
+      }, 
       [
-        "step_id",
         "goal_id",
-        "step_title",
-        "step_notes",
-        "step_completed"
+        "user_id",
+        "goal_title",
+        "goal_completed"
       ]);
-    updatedSteps.push(editedStep);
-  }));
+    updatedGoal = editedGoal;
+  }
 
-  const [editedGoal] = await db("goals")
-    .where("goal_id", goal_id)
-    .update({
-      goal_title: goal_title,
-      goal_completed: goal_completed
-    }, 
-    [
-      "goal_id",
-      "user_id",
-      "goal_title",
-      "goal_completed"
-    ]);
+  let userGoal = {};
 
-  const updatedGoal = {
-    goal_id: editedGoal.goal_id,
-    user_id: editedGoal.user_id,
-    goal_title: editedGoal.goal_title,
-    goal_completed: editedGoal.goal_completed,
-    steps: updatedSteps !== [] ? updatedSteps : steps
-  };
+  if (updatedSteps.length > 1) {
+    userGoal = {...updatedGoal, steps: updatedSteps}; 
+  } else {
+    userGoal = updatedGoal;
+  }
 
-  return updatedGoal;
+  return userGoal;
 }
 
 module.exports = {
