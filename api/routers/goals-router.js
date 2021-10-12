@@ -19,7 +19,7 @@ router.post("/new-goal/:user_id", (req, res, next) => {
     .catch(err => console.log(err));
 });
 
-// Edit existing goal
+// Edit existing specified goal
 router.put("/edit/:goal_id", (req, res, next) => {
   Goals.editGoal(req.params.goal_id, req.body)
     .then(goal => {
@@ -28,6 +28,7 @@ router.put("/edit/:goal_id", (req, res, next) => {
     .catch(err => console.log(err));
 });
 
+// Delete specified goal and all associated steps
 router.delete("/delete-goal/:goal_id", (req, res, next) => {
   Goals.deleteGoal(req.params.goal_id)
     .then(deleted => {
@@ -36,6 +37,7 @@ router.delete("/delete-goal/:goal_id", (req, res, next) => {
     .catch(err => console.log(err));
 });
 
+// Delete specified step
 router.delete("/delete-step/:step_id", (req, res, next) => {
   Goals.deleteStep(req.params.step_id)
     .then(deleted => {
