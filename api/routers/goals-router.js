@@ -37,7 +37,11 @@ router.delete("/delete-goal/:goal_id", (req, res, next) => {
 });
 
 router.delete("/delete-step/:step_id", (req, res, next) => {
-  res.json("wired");
+  Goals.deleteStep(req.params.step_id)
+    .then(deleted => {
+      res.status(200).json(deleted);
+    })
+    .catch(err => console.log(err));
 });
 
 
