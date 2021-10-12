@@ -151,8 +151,17 @@ async function editGoal(goal_id, goal) {
   return userGoal;
 }
 
+async function deleteGoal(goal_id) {
+  const goal = await db("goals")
+    .where("goal_id", goal_id)
+    .del([]);
+
+  return goal;
+}
+
 module.exports = {
   getUserGoals,
   newGoal,
   editGoal,
+  deleteGoal
 };
