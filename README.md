@@ -122,7 +122,7 @@ Response:
 [POST] /api/goals/new-goal/:user_id
 Parameter: user_id
 Request body: 
-{
+  {
     "user_id": integer,
     "goal_title": "string",
     "steps": [
@@ -132,11 +132,11 @@ Request body:
         }
     ]
     
-}
+  }
   - Required: user_id, goal_title, step_title (required for each step object in list)
   - Optional: step_notes. May include list of step objects.
 Response: 
-{
+  {
     "goal_id": 4,
     "user_id": 1,
     "goal_title": "My new Goal",
@@ -148,8 +148,100 @@ Response:
         "step_notes": "This is your first step",
         "step_completed": false
     }
-}
+  }
   - goal_completed, step_completed are false by default. Can be updated to true in edit goal endpoint.
+
+#### Edit specified goal and/or it's associated steps
+[PUT] /api/goals/edit/:goal_id
+Parameter: goal_id
+Request body: required properties + any editable properties
+  {
+    "goal_id": 1,
+    "user_id": 1,
+    "goal_title": "Read 12 books this year",
+    "goal_completed": false,
+    "steps": [
+      {
+        "step_id": 1,
+        "step_title": "Pick 12 books to read",
+        "step_notes": null,
+        "step_completed": true,
+        "goal_id": 1
+      },
+      {
+        "step_id": 2,
+        "step_title": "Read 1 book this month",
+        "step_notes": "Read 30 minutes/day",
+        "step_completed": false,
+        "goal_id": 1
+      }
+    ]
+  }
+  - Required: 
+    - if editing goal properties (i.e. goal_title, goal_completed)
+      - goal_id
+    - if editing step properties (i.e. step_title, step_notes, step_completed)
+      - step_id
+    - any properties that are being edited (see optional for list)
+      
+  - Optional: 
+    - goal_title, goal_completed, steps (step_id - unless step is being edited then required, step_title, step_notes, step_completed)
+
+Response: response body will contain properties that are being edited. 
+  e.g.#1 - Edited goal properties(goal_title, goal_completed) and step properties(step_title, step_notes, step_completed):
+
+  {
+    "goal_id": 1,
+    "user_id": 1,
+    "goal_title": "Read 12 books this year",
+    "goal_completed": false,
+    "steps": [
+      {
+        "step_id": 1,
+        "step_title": "Pick 12 books to read",
+        "step_notes": null,
+        "step_completed": true,
+        "goal_id": 1
+      },
+      {
+        "step_id": 2,
+        "step_title": "Read 1 book this month",
+        "step_notes": "Read 30 minutes/day",
+        "step_completed": false,
+        "goal_id": 1
+      }
+    ]
+  }
+
+  e.g.#2 - Edited only goal properties (goal_title, goal_completed):
+  {
+    "goal_id": 1,
+    "user_id": 1,
+    "goal_title": "Read 12 books this year",
+    "goal_completed": false,
+  }
+
+  e.g.#3 - Edited only step properties (step_title, step_notes, step_completed):
+  {
+    "steps": [
+      {
+        "step_id": 1,
+        "step_title": "Pick 12 books to read",
+        "step_notes": null,
+        "step_completed": true,
+        "goal_id": 1
+      },
+      {
+        "step_id": 2,
+        "step_title": "Read 1 book this month",
+        "step_notes": "Read 30 minutes/day",
+        "step_completed": false,
+        "goal_id": 1
+      }
+    ]
+  }
+
+  
 
 **The following scripts NEED TO BE EDITED before using: replace `YOUR_HEROKU_APP_NAME`**
 
