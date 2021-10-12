@@ -151,8 +151,26 @@ async function editGoal(goal_id, goal) {
   return userGoal;
 }
 
+async function deleteGoal(goal_id) {
+  const goal = await db("goals")
+    .where("goal_id", goal_id)
+    .del([]);
+
+  return goal;
+}
+
+async function deleteStep(step_id) {
+  const step = await db("steps")
+    .where("step_id", step_id)
+    .del([]);
+
+  return step;
+}
+
 module.exports = {
   getUserGoals,
   newGoal,
   editGoal,
+  deleteGoal,
+  deleteStep
 };

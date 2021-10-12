@@ -241,7 +241,21 @@ Response: response body will contain properties that are being edited.
     ]
   }
 
-  
+#### Delete specified goal
+[DELETE] /delete-goal/:goal_id
+Parameter: goal_id
+Request body: none
+Response: Number of deleted goals
+  1 (1 goal was deleted)
+
+#### Delete specified step
+[DELETE] /delete-step/:step_id
+Parameter: step_id
+Request body: none
+Response: Number of deleted steps
+  1 (1 step was deleted)
+
+
 
 **The following scripts NEED TO BE EDITED before using: replace `YOUR_HEROKU_APP_NAME`**
 
