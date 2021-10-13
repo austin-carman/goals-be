@@ -7,7 +7,7 @@ const restricted = (req, res, next) => {
 const validateUserId =  (req, res, next) => {
 
 };
-// check that goal_id exists in db
+
 const validateGoalId =  async (req, res, next) => {
   const { goal_id } = req.params;
   try {
@@ -25,9 +25,23 @@ const validateGoalId =  async (req, res, next) => {
     next(err);
   }
 };
-// check that step_id exists in db
-const validateStepId =  (req, res, next) => {
 
+const validateStepId =  async (req, res, next) => {
+  const { step_id } = req.params;
+  try {
+    const step = await Goals.getStep(step_id);
+    if (!step || step.length === 0) {
+      res.json({
+        status: 404,
+        message: `Could not find step with id, ${step_id}`
+      });
+    } else {
+      next();
+    }
+  }
+  catch (err) {
+    next(err);
+  }
 };
 // check req.body has all required, optionals are correct format
 const validateNewGoal = (req, res, next) => {

@@ -9,9 +9,9 @@ const {
   validateEditGoal
 } = require("../middleware/goals-middleware");
 
-// Get specified goal
-router.get("/goal/:goal_id", validateGoalId, (req, res, next) => {
-  Goals.getGoal(req.params.goal_id)
+// Get specified step
+router.get("/step/:step_id", validateStepId, (req, res, next) => {
+  Goals.getStep(req.params.step_id)
     .then(goal => {
       res.json(goal);
     })
@@ -28,7 +28,7 @@ router.get("/:user_id", (req, res, next) => { // restricted, validate user_id
 });
 
 // Create a new goal for specified user
-router.post("/new-goal/:user_id", (req, res, next) => { // restricted, validate user_id, validate body
+router.post("/new-goal/:user_id", (req, res, next) => { // restricted, validate user_id, validate new body
   Goals.newGoal(req.params.user_id, req.body)
     .then(goal => {
       res.json(goal);
@@ -37,7 +37,7 @@ router.post("/new-goal/:user_id", (req, res, next) => { // restricted, validate 
 });
 
 // Edit existing specified goal
-router.put("/edit/:goal_id", validateGoalId, (req, res, next) => { // restricted, validate goal_id, validate body
+router.put("/edit/:goal_id", validateGoalId, (req, res, next) => { // restricted, validate edit body
   Goals.editGoal(req.params.goal_id, req.body)
     .then(goal => {
       res.json(goal);
@@ -46,7 +46,7 @@ router.put("/edit/:goal_id", validateGoalId, (req, res, next) => { // restricted
 });
 
 // Delete specified goal and all associated steps
-router.delete("/delete-goal/:goal_id", validateGoalId, (req, res, next) => { // restricted, validate goal_id
+router.delete("/delete-goal/:goal_id", validateGoalId, (req, res, next) => { // restricted
   Goals.deleteGoal(req.params.goal_id)
     .then(deleted => {
       res.status(200).json(deleted);
@@ -55,7 +55,7 @@ router.delete("/delete-goal/:goal_id", validateGoalId, (req, res, next) => { // 
 });
 
 // Delete specified step
-router.delete("/delete-step/:step_id", (req, res, next) => { // restricted, validate step_id
+router.delete("/delete-step/:step_id", validateStepId, (req, res, next) => { // restricted
   Goals.deleteStep(req.params.step_id)
     .then(deleted => {
       res.status(200).json(deleted);

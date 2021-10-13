@@ -9,6 +9,14 @@ async function getGoal(goal_id) {
   return goal;
 }
 
+// Find step by step_id
+async function getStep(step_id) {
+  const step = await db("steps")
+    .where("step_id", step_id);
+
+  return step;
+}
+
 // ** All goals for specified user **
 async function getUserGoals(user_id) {
   const data = await db("goals as g")
@@ -78,29 +86,31 @@ async function newGoal(user_id, goal) {
       "goal_title",
       "goal_completed"
     ]);
-  
-  const newSteps = steps.map(step => {
-    return {...step, goal_id: addedGoal.goal_id};
-  });
 
-  const [addedSteps] = await db("steps")
-    .insert(
-      newSteps, 
-      [
-        "step_id", 
-        "goal_id",
-        "step_title",
-        "step_notes",
-        "step_completed"
-      ]
-    );
+  const newSteps = [];
+  if (steps != undefined) {
+    await Promise.all(steps.map(async step => { 
+      const [addedStep] = await db("steps")
+        .insert(
+          {...step, goal_id: addedGoal.goal_id},
+          [
+            "step_id", 
+            "goal_id",
+            "step_title",
+            "step_notes",
+            "step_completed"
+          ]
+        );
+      newSteps.push(addedStep);
+    }));
+  }
 
   const userGoal = {
     goal_id: addedGoal.goal_id,
     user_id: addedGoal.user_id,
     goal_title: addedGoal.goal_title,
     goal_completed: addedGoal.goal_completed,
-    steps: addedSteps
+    steps: newSteps
   };
 
   return userGoal;
@@ -179,6 +189,7 @@ async function deleteStep(step_id) {
 
 module.exports = {
   getGoal,
+  getStep,
   getUserGoals,
   newGoal,
   editGoal,
