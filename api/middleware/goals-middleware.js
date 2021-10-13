@@ -1,9 +1,5 @@
 const Goals = require("../models/goals-model");
 
-const restricted = (req, res, next) => {
-  
-};
-
 // check that user_id exists, check that user_id matches user_id of logged in user
 const validateUserId =  (req, res, next) => {
 
@@ -140,7 +136,6 @@ const validateEditSteps = (req, res, next) => {
 };
 
 module.exports = {
-  restricted,
   validateUserId,
   validateGoalId,
   validateStepId,
