@@ -17,7 +17,7 @@ async function getStep(step_id) {
   return step;
 }
 
-// ** All goals for specified user **
+// All goals for specified user
 async function getUserGoals(user_id) {
   const data = await db("goals as g")
     .leftJoin("steps as s", "g.goal_id", "=", "s.goal_id")
@@ -72,7 +72,7 @@ async function getUserGoals(user_id) {
   return userGoals;
 }
 
-// ** Create new goal for specified user **
+// Create new goal for specified user
 async function newGoal(user_id, goal) {
   const { goal_title, steps } = goal;
   const [addedGoal] = await db("goals")
@@ -116,7 +116,7 @@ async function newGoal(user_id, goal) {
   return userGoal;
 }
 
-// ** Edit specified goal **
+// Edit specified goal
 async function editGoal(goal_id, goal) {
   const updatedSteps = [];
   if (goal.steps) {
@@ -169,7 +169,7 @@ async function editGoal(goal_id, goal) {
   return userGoal;
 }
 
-// ** Delete specified goal and all associated steps **
+// Delete specified goal and all associated steps
 async function deleteGoal(goal_id) {
   const goal = await db("goals")
     .where("goal_id", goal_id)
@@ -178,7 +178,7 @@ async function deleteGoal(goal_id) {
   return goal;
 }
 
-// ** Delete specified step **
+// Delete specified step
 async function deleteStep(step_id) {
   const step = await db("steps")
     .where("step_id", step_id)

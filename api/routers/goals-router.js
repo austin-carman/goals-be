@@ -9,15 +9,6 @@ const {
   validateEditGoal
 } = require("../middleware/goals-middleware");
 
-// Get specified step
-router.get("/step/:step_id", validateStepId, (req, res, next) => {
-  Goals.getStep(req.params.step_id)
-    .then(goal => {
-      res.json(goal);
-    })
-    .catch(err => console.log(err));
-});
-
 // Get all goals for specified user
 router.get("/:user_id", (req, res, next) => { // restricted, validate user_id
   Goals.getUserGoals(req.params.user_id)
@@ -62,6 +53,5 @@ router.delete("/delete-step/:step_id", validateStepId, (req, res, next) => { // 
     })
     .catch(err => console.log(err));
 });
-
 
 module.exports = router;

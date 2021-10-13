@@ -50,29 +50,29 @@ optional:
   step_notes
 */
 
-  if (!req.body.goal_title || req.body.goal_title === undefined) { // goal_title must be a string
-    res.json({
-      status: 404,
-      message: "goal_title is required"
-    });
-  }
+  // if (!req.body.goal_title || req.body.goal_title === undefined) { // goal_title must be a string
+  //   res.json({
+  //     status: 404,
+  //     message: "goal_title is required"
+  //   });
+  // }
   
-  if (req.body.steps === undefined) {
-    next();
-  } else if (req.body.steps.length > 0) {
-    req.body.steps.map(step => {
-      if (step.step_title === undefined) { // step_title must be a string
-        res.json({
-          status: 404,
-          message: "Created steps must have step_title"
-        });
-      } else if (step.step_notes != undefined) {
-        // step_notes must be a string
-      }
-    });
-  } else {
-    next();
-  }
+  // if (req.body.steps === undefined) {
+  //   next();
+  // } else if (req.body.steps.length > 0) {
+  //   req.body.steps.map(step => {
+  //     if (step.step_title === undefined) { // step_title must be a string
+  //       res.json({
+  //         status: 404,
+  //         message: "Created steps must have step_title"
+  //       });
+  //     } else if (step.step_notes != undefined) {
+  //       // step_notes must be a string
+  //     }
+  //   });
+  // } else {
+  //   next();
+  // }
 
 
 };
