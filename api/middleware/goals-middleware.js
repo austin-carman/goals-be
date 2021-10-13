@@ -126,6 +126,8 @@ const validateEditSteps = (req, res, next) => {
       message: "step_completed must be a boolean"
     });
   }
+
+  next();
 };
 
 module.exports = {
