@@ -94,24 +94,31 @@ const validateEditGoal = (req, res, next) => {
       message: "goal_completed must be a boolean"
     });
   }
-  
+
   next();
 };
 
 const validateEditSteps = (req, res, next) => {
-  // const { 
-  //   step_id,
-  //   step_title,
-  //   step_notes,
-  //   step_completed
-  // } = req.body;
-  // if ((step_title || step_notes || step_completed) && !step_id) {
-  //   res.json({
-  //     status: 404,
-  //     message: "step_id is required to make edits to step_title, step_notes, and step_completed"
-  //   });
-  // }
-
+  const { step_id, step_title, step_notes, step_completed } = req.body;
+  if ((step_title || step_notes || step_completed) && !step_id) {
+    res.json({
+      status: 404,
+      message: "step_id is required to make edits to step_title, step_notes, and step_completed"
+    });
+  } else if (
+    (
+      step_title || step_notes) && typeof (step_title || step_notes
+    ) != "string") {
+    res.json({
+      status: 404,
+      message: "step_title and step_notes must be a string"
+    });
+  } else if (step_completed && typeof step_completed != "boolean") {
+    res.json({
+      status: 404,
+      message: "step_completed must be a boolean"
+    });
+  }
 };
 
 module.exports = {
