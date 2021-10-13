@@ -43,39 +43,39 @@ const validateStepId =  async (req, res, next) => {
     next(err);
   }
 };
-// check req.body has all required, optionals are correct format
+
 const validateNewGoal = (req, res, next) => {
-/*
-optional:
-  step_notes
-*/
+  if (!req.body.goal_title || typeof req.body.goal_title != "string") {
+    res.json({
+      status: 404,
+      message: "goal_title is required and must be a string."
+    });
+  } else if (req.body.steps === undefined) {
+    next();
+  }
 
-  // if (!req.body.goal_title || req.body.goal_title === undefined) { // goal_title must be a string
-  //   res.json({
-  //     status: 404,
-  //     message: "goal_title is required"
-  //   });
-  // }
-  
-  // if (req.body.steps === undefined) {
-  //   next();
-  // } else if (req.body.steps.length > 0) {
-  //   req.body.steps.map(step => {
-  //     if (step.step_title === undefined) { // step_title must be a string
-  //       res.json({
-  //         status: 404,
-  //         message: "Created steps must have step_title"
-  //       });
-  //     } else if (step.step_notes != undefined) {
-  //       // step_notes must be a string
-  //     }
-  //   });
-  // } else {
-  //   next();
-  // }
+  req.body.steps.map(step => {
+    if (!step.step_title || typeof step.step_title != "string") {
+      res.json({
+        status: 404,
+        message: "step_title is required for creating steps, must be a string"
+      });
+    } else if (step.step_notes && typeof step.step_notes != "string") {
+      res.json({
+        status: 404,
+        message: "step_notes must be a string"
+      });
+    } else if (step.step_completed && typeof step.step_completed != "boolean") {
+      res.json({
+        status: 404,
+        message: "step_completed must be a boolean"
+      });
+    }
+  });
 
-
+  next();
 };
+
 // check that req.body has all required, optionals are correct format
 const validateEditGoal = (req, res, next) => {
 
