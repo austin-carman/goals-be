@@ -1,7 +1,23 @@
 const db = require("../../data/db-config");
 const { removeArrDuplicateItems } = require("../helper-functions/helper-functions");
 
-// ** All goals for specified user **
+// Find goal by goal_id
+async function getGoal(goal_id) {
+  const goal = await db("goals")
+    .where("goal_id", goal_id);
+
+  return goal;
+}
+
+// Find step by step_id
+async function getStep(step_id) {
+  const step = await db("steps")
+    .where("step_id", step_id);
+
+  return step;
+}
+
+// All goals for specified user
 async function getUserGoals(user_id) {
   const data = await db("goals as g")
     .leftJoin("steps as s", "g.goal_id", "=", "s.goal_id")
@@ -56,7 +72,7 @@ async function getUserGoals(user_id) {
   return userGoals;
 }
 
-// ** Create new goal for specified user **
+// Create new goal for specified user
 async function newGoal(user_id, goal) {
   const { goal_title, steps } = goal;
   const [addedGoal] = await db("goals")
@@ -70,35 +86,37 @@ async function newGoal(user_id, goal) {
       "goal_title",
       "goal_completed"
     ]);
-  
-  const newSteps = steps.map(step => {
-    return {...step, goal_id: addedGoal.goal_id};
-  });
 
-  const [addedSteps] = await db("steps")
-    .insert(
-      newSteps, 
-      [
-        "step_id", 
-        "goal_id",
-        "step_title",
-        "step_notes",
-        "step_completed"
-      ]
-    );
+  const newSteps = [];
+  if (steps != undefined) {
+    await Promise.all(steps.map(async step => { 
+      const [addedStep] = await db("steps")
+        .insert(
+          {...step, goal_id: addedGoal.goal_id},
+          [
+            "step_id", 
+            "goal_id",
+            "step_title",
+            "step_notes",
+            "step_completed"
+          ]
+        );
+      newSteps.push(addedStep);
+    }));
+  }
 
   const userGoal = {
     goal_id: addedGoal.goal_id,
     user_id: addedGoal.user_id,
     goal_title: addedGoal.goal_title,
     goal_completed: addedGoal.goal_completed,
-    steps: addedSteps
+    steps: newSteps.length > 0 ? newSteps : null
   };
 
   return userGoal;
 }
 
-// ** Edit specified goal **
+// Edit specified goal
 async function editGoal(goal_id, goal) {
   const updatedSteps = [];
   if (goal.steps) {
@@ -123,7 +141,7 @@ async function editGoal(goal_id, goal) {
   }
 
   let updatedGoal = {};
-  if (goal.goal_title || goal.goal_completed) {
+  if (goal.goal_title != undefined || goal.goal_completed != undefined) {
     const { goal_title, goal_completed } = goal;
     const [editedGoal] = await db("goals")
       .where("goal_id", goal_id)
@@ -141,8 +159,7 @@ async function editGoal(goal_id, goal) {
   }
 
   let userGoal = {};
-
-  if (updatedSteps.length > 1) {
+  if (updatedSteps.length > 0) {
     userGoal = {...updatedGoal, steps: updatedSteps}; 
   } else {
     userGoal = updatedGoal;
@@ -151,7 +168,7 @@ async function editGoal(goal_id, goal) {
   return userGoal;
 }
 
-// ** Delete specified goal and all associated steps **
+// Delete specified goal and all associated steps
 async function deleteGoal(goal_id) {
   const goal = await db("goals")
     .where("goal_id", goal_id)
@@ -160,7 +177,7 @@ async function deleteGoal(goal_id) {
   return goal;
 }
 
-// ** Delete specified step **
+// Delete specified step
 async function deleteStep(step_id) {
   const step = await db("steps")
     .where("step_id", step_id)
@@ -170,6 +187,8 @@ async function deleteStep(step_id) {
 }
 
 module.exports = {
+  getGoal,
+  getStep,
   getUserGoals,
   newGoal,
   editGoal,

@@ -133,8 +133,12 @@ Request body:
     ]
     
   }
-  - Required: user_id, goal_title, step_title (required for each step object in list)
-  - Optional: step_notes. May include list of step objects.
+  - Required: 
+    - user_id, goal_title
+    - if steps are being created:
+      - step_title (required for each step that is created)
+  - Optional: 
+    - steps(if no steps are being created), step_notes
 Response: 
   {
     "goal_id": 4,
