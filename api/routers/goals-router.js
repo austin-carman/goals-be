@@ -6,6 +6,7 @@ const {
   validateGoalId,
   validateStepId,
   validateNewGoal,
+  validateNewSteps,
   validateEditGoal,
   validateEditSteps
 } = require("../middleware/goals-middleware");
@@ -20,7 +21,7 @@ router.get("/:user_id", (req, res, next) => { // restricted, validate user_id
 });
 
 // Create a new goal for specified user
-router.post("/new-goal/:user_id", validateNewGoal, (req, res, next) => { // restricted, validate user_id
+router.post("/new-goal/:user_id", validateNewGoal, validateNewSteps, (req, res, next) => { // restricted, validate user_id
   Goals.newGoal(req.params.user_id, req.body)
     .then(goal => {
       res.json(goal);

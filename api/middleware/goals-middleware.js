@@ -50,11 +50,18 @@ const validateNewGoal = (req, res, next) => {
       status: 404,
       message: "goal_title is required and must be a string."
     });
-  } else if (!req.body.steps) {
+  } 
+
+  next();
+};
+
+const validateNewSteps = (req, res, next) => {
+  const { steps } = req.body;
+  if (!steps) {
     return next();
   }
 
-  req.body.steps.map(step => {
+  steps.map(step => {
     if (!step.step_title || typeof step.step_title != "string") {
       res.json({
         status: 404,
@@ -127,6 +134,7 @@ module.exports = {
   validateGoalId,
   validateStepId,
   validateNewGoal,
+  validateNewSteps,
   validateEditGoal,
   validateEditSteps
 };
