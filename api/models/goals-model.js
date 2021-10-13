@@ -1,6 +1,14 @@
 const db = require("../../data/db-config");
 const { removeArrDuplicateItems } = require("../helper-functions/helper-functions");
 
+// Find goal by goal_id
+async function getGoal(goal_id) {
+  const goal = await db("goals")
+    .where("goal_id", goal_id);
+
+  return goal;
+}
+
 // ** All goals for specified user **
 async function getUserGoals(user_id) {
   const data = await db("goals as g")
@@ -170,6 +178,7 @@ async function deleteStep(step_id) {
 }
 
 module.exports = {
+  getGoal,
   getUserGoals,
   newGoal,
   editGoal,
