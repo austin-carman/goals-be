@@ -141,7 +141,7 @@ async function editGoal(goal_id, goal) {
   }
 
   let updatedGoal = {};
-  if (goal.goal_title || goal.goal_completed) {
+  if (goal.goal_title != undefined || goal.goal_completed != undefined) {
     const { goal_title, goal_completed } = goal;
     const [editedGoal] = await db("goals")
       .where("goal_id", goal_id)

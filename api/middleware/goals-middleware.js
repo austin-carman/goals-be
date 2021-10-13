@@ -95,7 +95,7 @@ const validateEditGoal = (req, res, next) => {
       status: 404,
       message: "goal_title must be a string"
     });
-  } else if (goal_completed && typeof goal_title != "boolean") {
+  } else if ((goal_completed != undefined) && typeof goal_completed != "boolean") {
     res.json({
       status: 404,
       message: "goal_completed must be a boolean"
@@ -106,26 +106,33 @@ const validateEditGoal = (req, res, next) => {
 };
 
 const validateEditSteps = (req, res, next) => {
-  const { step_id, step_title, step_notes, step_completed } = req.body;
-  if ((step_title || step_notes || step_completed) && !step_id) {
-    res.json({
-      status: 404,
-      message: "step_id is required to make edits to step_title, step_notes, and step_completed"
-    });
-  } else if (
-    (
-      step_title || step_notes) && typeof (step_title || step_notes
-    ) != "string") {
-    res.json({
-      status: 404,
-      message: "step_title and step_notes must be a string"
-    });
-  } else if (step_completed && typeof step_completed != "boolean") {
-    res.json({
-      status: 404,
-      message: "step_completed must be a boolean"
-    });
+  if (req.body.steps === undefined) {
+    return next();
   }
+
+  req.body.steps.map(step => {
+    if ((step.step_title || step.step_notes || (step.step_completed != undefined)) && !step.step_id) {
+      res.json({
+        status: 404,
+        message: "step_id is required to make edits to step_title, step_notes, and step_completed"
+      });
+    } else if (step.step_title != undefined && typeof step.step_title != "string") {
+      res.json({
+        status: 404,
+        message: "step_title and step_notes must be a string"
+      });
+    } else if (step.step_notes != undefined && typeof step.step_notes != "string") {
+      res.json({
+        status: 404,
+        message: "step_title and step_notes must be a string"
+      });
+    } else if (step.step_completed != undefined && typeof step.step_completed != "boolean") {
+      res.json({
+        status: 404,
+        message: "step_completed must be a boolean"
+      });
+    }
+  });
 
   next();
 };
