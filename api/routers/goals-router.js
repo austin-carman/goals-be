@@ -28,7 +28,7 @@ router.get("/:user_id", (req, res, next) => { // restricted, validate user_id
 });
 
 // Create a new goal for specified user
-router.post("/new-goal/:user_id", (req, res, next) => { // restricted, validate user_id, validate new body
+router.post("/new-goal/:user_id", validateNewGoal, (req, res, next) => { // restricted, validate user_id
   Goals.newGoal(req.params.user_id, req.body)
     .then(goal => {
       res.json(goal);
