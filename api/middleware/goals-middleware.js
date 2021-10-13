@@ -50,8 +50,8 @@ const validateNewGoal = (req, res, next) => {
       status: 404,
       message: "goal_title is required and must be a string."
     });
-  } else if (req.body.steps === undefined) {
-    next();
+  } else if (!req.body.steps) {
+    return next();
   }
 
   req.body.steps.map(step => {
@@ -60,10 +60,10 @@ const validateNewGoal = (req, res, next) => {
         status: 404,
         message: "step_title is required for creating steps, must be a string"
       });
-    } else if (step.step_notes && typeof step.step_notes != "string") {
+    } else if (step.step_notes === "" || (step.step_notes && typeof step.step_notes != "string")) {
       res.json({
         status: 404,
-        message: "step_notes must be a string"
+        message: "step_notes must be a non-empty string"
       });
     } else if (step.step_completed && typeof step.step_completed != "boolean") {
       res.json({

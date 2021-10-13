@@ -110,7 +110,7 @@ async function newGoal(user_id, goal) {
     user_id: addedGoal.user_id,
     goal_title: addedGoal.goal_title,
     goal_completed: addedGoal.goal_completed,
-    steps: newSteps
+    steps: newSteps.length > 0 ? newSteps : null
   };
 
   return userGoal;
@@ -159,8 +159,7 @@ async function editGoal(goal_id, goal) {
   }
 
   let userGoal = {};
-
-  if (updatedSteps.length > 1) {
+  if (updatedSteps.length > 0) {
     userGoal = {...updatedGoal, steps: updatedSteps}; 
   } else {
     userGoal = updatedGoal;
