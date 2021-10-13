@@ -1,14 +1,16 @@
 const Goals = require("../models/goals-model");
 
 const restricted = (req, res, next) => {
-
+  
 };
+
 // check that user_id exists, check that user_id matches user_id of logged in user
 const validateUserId =  (req, res, next) => {
 
 };
 
-const validateGoalId =  async (req, res, next) => {
+// validates that goalId exists. Should it validate that goal belongs to user?
+const validateGoalId =  async (req, res, next) => { 
   const { goal_id } = req.params;
   try {
     const goal = await Goals.getGoal(goal_id);
