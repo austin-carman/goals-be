@@ -76,8 +76,41 @@ const validateNewGoal = (req, res, next) => {
   next();
 };
 
-// check that req.body has all required, optionals are correct format
 const validateEditGoal = (req, res, next) => {
+  const { goal_id, goal_title, goal_completed } = req.body;
+  if ((goal_title || goal_completed) && !goal_id) {
+    res.json({
+      status: 404,
+      message: "goal_id is required to make edits to goal_title and goal_completed"
+    });
+  } else if (goal_title && typeof goal_title != "string") {
+    res.json({
+      status: 404,
+      message: "goal_title must be a string"
+    });
+  } else if (goal_completed && typeof goal_title != "boolean") {
+    res.json({
+      status: 404,
+      message: "goal_completed must be a boolean"
+    });
+  }
+  
+  next();
+};
+
+const validateEditSteps = (req, res, next) => {
+  // const { 
+  //   step_id,
+  //   step_title,
+  //   step_notes,
+  //   step_completed
+  // } = req.body;
+  // if ((step_title || step_notes || step_completed) && !step_id) {
+  //   res.json({
+  //     status: 404,
+  //     message: "step_id is required to make edits to step_title, step_notes, and step_completed"
+  //   });
+  // }
 
 };
 
@@ -88,4 +121,5 @@ module.exports = {
   validateStepId,
   validateNewGoal,
   validateEditGoal,
+  validateEditSteps
 };

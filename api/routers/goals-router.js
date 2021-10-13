@@ -6,7 +6,8 @@ const {
   validateGoalId,
   validateStepId,
   validateNewGoal,
-  validateEditGoal
+  validateEditGoal,
+  validateEditSteps
 } = require("../middleware/goals-middleware");
 
 // Get all goals for specified user
@@ -28,7 +29,7 @@ router.post("/new-goal/:user_id", validateNewGoal, (req, res, next) => { // rest
 });
 
 // Edit existing specified goal
-router.put("/edit/:goal_id", validateGoalId, (req, res, next) => { // restricted, validate edit body
+router.put("/edit/:goal_id", validateGoalId, validateEditGoal, validateEditSteps, (req, res, next) => { // restricted, validate edit body
   Goals.editGoal(req.params.goal_id, req.body)
     .then(goal => {
       res.json(goal);
