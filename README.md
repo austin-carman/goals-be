@@ -45,6 +45,7 @@ Request body:
     password: "password"
   }
 Response: 
+  - Example:
   {
     message: "Welcome back, John!",
     username: "John123",
