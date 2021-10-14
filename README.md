@@ -66,8 +66,8 @@ Request body:
   - Required:
     - first_name (string)
     - last_name (string)
-    - username: (string),
-    - password: (string)
+    - username: (string) - must be at least 3 characters in length
+    - password: (string) - must be at least 3 characters in length
   - Example:
   {
     first_name: "John", 
