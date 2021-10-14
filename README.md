@@ -28,56 +28,67 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - **test**: Runs tests.
 - **deploy**: Deploys the main branch to Heroku.
 
-## TODO NOTES:
-- creating a new step: right now step_title is required. What if the user wants to create a new goal without creating any steps for it? Maybe change step_title to not_nullable?
-- Consider adding time created for a new goal/steps
-- Find a better way to structure the return for get user goals(goals-model)
+## TODO NOTES/Fixes:
+- Consider adding column to "goals" and "steps" tables for time created to avoid potential step order problems
+- ReadMe: add baseURL for User Router/Goals Router
+- Creating a new step: step_title is required for steps but if req.body includes, "steps": [], then no err. Should have error?
+- Editing a goal: 
+
 
 ## API Endpoint Documentation
 
-### User
-#### Login for existing user.
+### User Router
+BaseURL: 
+#### Login for existing user
 [POST] /api/user/login
 Parameter: none
 Request body: 
+  - Required: 
+    - username (string)
+    - password (string)
+  - Example:
   {
-    username: "sting", 
-    password: "sting"
+    username: "John123",
+    password: "password"
   }
-  - Required: all
 Response: 
   {
-    message: Welcome back (user's first name)!,
-    username: (user's username),
-    userId: (user's user_id),
+    message: "Welcome back, John!",
+    username: "John123",
+    userId: 7,
     token: (token for authentication)
   }
 
-#### Register for new user.
+#### Register new user
 [POST] /api/user/register
 Parameter: none
 Request body: 
+  - Required:
+    - first_name (string)
+    - last_name (string)
+    - username: (string),
+    - password: (string)
+  - Example:
   {
-    first_name: "string", 
-    last_name: "string:, 
-    username: "string", 
-    password: "string"
+    first_name: "John", 
+    last_name: "Doe:, 
+    username: "John123", 
+    password: "password"
   }
-  - Required: all
 Response: 
   {
-    "user_id": 3,
+    "user_id": 6,
     "first_name": "John",
     "last_name": "Doe",
-    "username": "JD"
+    "username": "John123"
   }
 
 ### Goals
-#### Get goals for specific user
+#### Get all goals for specified user
 [GET] /api/goals/:user_id
 Parameter: user_id
 Request body: none
-Response: 
+Response:
 [
   {
     "goal_id": 1,
@@ -115,50 +126,95 @@ Response:
         "goal_id": 2
       }
     ]
-  },
+  }
 ]
 
-#### Create new goal for specified user
+#### Create new goal, with or without steps, for specified user
 [POST] /api/goals/new-goal/:user_id
 Parameter: user_id
 Request body: 
-  {
-    "user_id": integer,
-    "goal_title": "string",
-    "steps": [
-        {
-            "step_title": "string",
-            "step_notes": "string"
-        }
-    ]
-    
-  }
   - Required: 
-    - user_id, goal_title
-    - if steps are being created:
-      - step_title (required for each step that is created)
-  - Optional: 
-    - steps(if no steps are being created), step_notes
-Response: 
+    - goal_title (string)
+
+  - Optional:
+    - goal_completed (boolean) - Defaults to false if not provided.
+    - steps (array of step objects) - Becomes required IF steps are created with goal.
+    - step_title (string) - Becomes required IF steps are created with goal, for each step object in list.
+    - step_notes (string) - An optional property of each step object
+    - step_completed (boolean) - An optional property of each step object. Defaults to false if not provided.
+
+  - Example 1: new goal without steps:
+  {
+    "goal_title": "New Goal Title"    
+  }
+
+  - Example 2: new goal with steps:
+  {
+    "goal_title": "New Goal Title",
+    "steps": [
+      {
+        "step_title": "Step #1 Title",
+        "step_completed": true
+      },
+      {
+        "step_title": "Step #2 Title",
+        "step_notes": "Step notes"
+      }
+    ]
+  }
+Response: Example 1 
   {
     "goal_id": 4,
     "user_id": 1,
-    "goal_title": "My new Goal",
+    "goal_title": "New Goal Title",
     "goal_completed": false,
-    "steps": {
-        "step_id": 4,
-        "goal_id": 4,
-        "step_title": "Step #1",
-        "step_notes": "This is your first step",
-        "step_completed": false
-    }
+    "steps": null
   }
-  - goal_completed, step_completed are false by default. Can be updated to true in edit goal endpoint.
+Response: Example 2
+  {
+    "goal_id": 4,
+    "user_id": 1,
+    "goal_title": "New Goal Title",
+    "goal_completed": false,
+    "steps": [
+      {
+        "step_id": 2,
+        "goal_id": 4,
+        "step_title": "Step #2 Title",
+        "step_notes": null
+        "step_completed": false
+      },
+      {
+        "step_id": 3,
+        "goal_id": 4,
+        "step_title": "Step #2 Title",
+        "step_notes": "Step notes",
+        "step_completed: false
+      }
+    ]
+  }
 
 #### Edit specified goal and/or it's associated steps
 [PUT] /api/goals/edit/:goal_id
 Parameter: goal_id
-Request body: required properties + any editable properties
+Request body:
+  - Required:
+    - if editing goal properties (i.e. goal_title, goal_completed):
+      - goal_id (integer)
+    - if editing step properties (i.e. step_title, step_notes, step_completed):
+      - steps (array of step objects) - Each step being edited must be included as a step object in the steps array.
+      - step_id (integer) - Required property in each step objects for steps being edited.
+    - any properties that are being edited
+
+  - Optional:
+    - goal_title (string)
+    - goal_completed (boolean)
+    - steps (array of step objects that are edited) - Becomes required if editing any step object properties, along with step_id for each edited step object.
+    - step_title (string)
+    - step_notes (string)
+    - step_completed (boolean)
+
+  - Example #1 - edits made to goal and steps:
   {
     "goal_id": 1,
     "user_id": 1,
@@ -181,19 +237,39 @@ Request body: required properties + any editable properties
       }
     ]
   }
-  - Required: 
-    - if editing goal properties (i.e. goal_title, goal_completed)
-      - goal_id
-    - if editing step properties (i.e. step_title, step_notes, step_completed)
-      - step_id
-    - any properties that are being edited (see optional for list)
-      
-  - Optional: 
-    - goal_title, goal_completed, steps (step_id - unless step is being edited then required, step_title, step_notes, step_completed)
 
-Response: response body will contain properties that are being edited. 
-  e.g.#1 - Edited goal properties(goal_title, goal_completed) and step properties(step_title, step_notes, step_completed):
+  - Example #2 - Edits only to goal properties (goal_title, goal_completed):
+  {
+    "goal_id": 1,
+    "user_id": 1,
+    "goal_title": "Read 12 books this year",
+    "goal_completed": false,
+  }
 
+  - Example #3 - Edited only step properties (step_title, step_notes, step_completed):
+  {
+    "steps": [
+      {
+        "step_id": 1,
+        "step_title": "Pick 12 books to read",
+        "step_notes": null,
+        "step_completed": true,
+        "goal_id": 1
+      },
+      {
+        "step_id": 2,
+        "step_title": "Read 1 book this month",
+        "step_notes": "Read 30 minutes/day",
+        "step_completed": false,
+        "goal_id": 1
+      }
+    ]
+  }
+
+
+Response: 
+  - response body will contain properties that are being edited. e.g. if only goal properties are edited (ie: goal_title, goal_completed) then only goal properties will be in response body (pre-existing steps will not be in response body) OR if only step properties are edited (ie: step_title, step_notes, step_completed) then only step properties will be in response body.  
+  - Example #1 - edits made to goal and steps:
   {
     "goal_id": 1,
     "user_id": 1,
@@ -217,7 +293,7 @@ Response: response body will contain properties that are being edited.
     ]
   }
 
-  e.g.#2 - Edited only goal properties (goal_title, goal_completed):
+  - Example #2 - Edited only goal properties (goal_title, goal_completed):
   {
     "goal_id": 1,
     "user_id": 1,
@@ -225,7 +301,7 @@ Response: response body will contain properties that are being edited.
     "goal_completed": false,
   }
 
-  e.g.#3 - Edited only step properties (step_title, step_notes, step_completed):
+  - Example #3 - Edited only step properties (step_title, step_notes, step_completed):
   {
     "steps": [
       {
@@ -250,14 +326,16 @@ Response: response body will contain properties that are being edited.
 Parameter: goal_id
 Request body: none
 Response: Number of deleted goals
-  1 (1 goal was deleted)
+  - Example - 1 Goal deleted:
+    - 1
 
 #### Delete specified step
 [DELETE] /delete-step/:step_id
 Parameter: step_id
 Request body: none
 Response: Number of deleted steps
-  1 (1 step was deleted)
+  - Example: 1 step deleted:
+    - 1
 
 
 
