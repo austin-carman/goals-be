@@ -28,6 +28,12 @@ const validateBody = (req, res, next) => {
 
 const validateUsername = async (req, res, next) => {
   const { username } = req.body;
+  if ( username === undefined || username.length < 3 ) {
+    next({
+      status: 400,
+      message: "username is required and must be at least 3 characters"
+    });
+  }
   try {
     const user = await User.findUserBy({username});
     if (!user) { // is ! really the best way to check???
@@ -46,6 +52,7 @@ const validateUsername = async (req, res, next) => {
 };
 
 const validatePassword = (req, res, next) => {
+  // check for password here, remove validateBody from login
   if (bcrypt.compareSync(req.body.password, req.user.password)) {
     next();
   } else {
