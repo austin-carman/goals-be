@@ -2,12 +2,24 @@ const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const validateBody = (req, res, next) => { // todo: username/password length, sanitize(e.g. white spaces)
-  const { username, password } = req.body;
-  if (!username || !password) {
+const validateBody = (req, res, next) => {
+  const { first_name, last_name, username, password } = req.body;
+  if ( 
+    first_name === undefined ||
+    first_name === "" || 
+    last_name === undefined || 
+    last_name === "" ||
+    username === undefined || 
+    password === undefined
+  ) {
     next({
       status: 400,
-      message: "Username and password are required"
+      message: "Please fill out all required fields"
+    });
+  } else if ( username.length < 3 || password.length < 3 ) {
+    next({
+      status: 400,
+      message: "Username and password must be at least 3 characters in length."
     });
   } else {
     next();

@@ -28,15 +28,8 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - **test**: Runs tests.
 - **deploy**: Deploys the main branch to Heroku.
 
-## TODO NOTES/Fixes:
-- Consider adding column to "goals" and "steps" tables for time created to avoid potential step order problems
-- ReadMe: add baseURL for User Router/Goals Router
-- Creating a new step: step_title is required for steps but if req.body includes, "steps": [], then no err. Should have error?
-- Editing a goal: 
-
 
 ## API Endpoint Documentation
-
 ### User Router
 BaseURL: 
 #### Login for existing user
@@ -66,16 +59,17 @@ Request body:
   - Required:
     - first_name (string)
     - last_name (string)
-    - username: (string),
-    - password: (string)
+    - username: (string) - must be at least 3 characters in length
+    - password: (string) - must be at least 3 characters in length
   - Example:
   {
     first_name: "John", 
-    last_name: "Doe:, 
+    last_name: "Doe", 
     username: "John123", 
     password: "password"
   }
 Response: 
+  - Example:
   {
     "user_id": 6,
     "first_name": "John",
