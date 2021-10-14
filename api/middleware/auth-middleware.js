@@ -19,7 +19,7 @@ const validateBody = (req, res, next) => {
   } else if ( username.length < 3 || password.length < 3 ) {
     next({
       status: 400,
-      message: "username and password must be at least 3 characters in length."
+      message: "Username and password must be at least 3 characters in length."
     });
   } else {
     next();
@@ -30,7 +30,7 @@ const validateUsername = async (req, res, next) => {
   const { username } = req.body;
   try {
     const user = await User.findUserBy({username});
-    if (user === undefined) {
+    if (!user) { // is ! really the best way to check???
       res.json({
         status: 401,
         message: "Invalid username or password"
@@ -59,12 +59,12 @@ const validatePassword = (req, res, next) => {
 const isUsernameTaken = async (req, res, next) => {
   const { username } = req.body;
   const user = await User.findUserBy({username});
-  if (user === undefined) {
+  if (!user) {
     next();
   } else {
     next({
       status: 403,
-      message: `${username}, is not available. Please choose another username.`
+      message: `Username, ${username}, already exists.`
     });
   }
 };
