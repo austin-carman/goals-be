@@ -28,56 +28,66 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - **test**: Runs tests.
 - **deploy**: Deploys the main branch to Heroku.
 
-## TODO NOTES:
-- creating a new step: right now step_title is required. What if the user wants to create a new goal without creating any steps for it? Maybe change step_title to not_nullable?
-- Consider adding time created for a new goal/steps
-- Find a better way to structure the return for get user goals(goals-model)
+## TODO NOTES/Fixes:
+- Consider adding column to "goals" and "steps" tables for time created to avoid potential step order problems
+- ReadMe: add baseURL for User Router/Goals Router
+- Creating a new step: step_title is required for steps but if req.body includes, "steps": [], then no err. Should have error?
+
 
 ## API Endpoint Documentation
 
-### User
-#### Login for existing user.
+### User Router
+BaseURL: 
+#### Login for existing user
 [POST] /api/user/login
 Parameter: none
 Request body: 
+  - Required: 
+    - username (string)
+    - password (string)
+  - Example:
   {
-    username: "sting", 
-    password: "sting"
+    username: "John123",
+    password: "password"
   }
-  - Required: all
 Response: 
   {
-    message: Welcome back (user's first name)!,
-    username: (user's username),
-    userId: (user's user_id),
+    message: "Welcome back, John!",
+    username: "John123",
+    userId: 7,
     token: (token for authentication)
   }
 
-#### Register for new user.
+#### Register new user
 [POST] /api/user/register
 Parameter: none
 Request body: 
+  - Required:
+    - first_name (string)
+    - last_name (string)
+    - username: (string),
+    - password: (string)
+  - Example:
   {
-    first_name: "string", 
-    last_name: "string:, 
-    username: "string", 
-    password: "string"
+    first_name: "John", 
+    last_name: "Doe:, 
+    username: "John123", 
+    password: "password"
   }
-  - Required: all
 Response: 
   {
-    "user_id": 3,
+    "user_id": 6,
     "first_name": "John",
     "last_name": "Doe",
-    "username": "JD"
+    "username": "John123"
   }
 
 ### Goals
-#### Get goals for specific user
+#### Get all goals for specified user
 [GET] /api/goals/:user_id
 Parameter: user_id
 Request body: none
-Response: 
+Response:
 [
   {
     "goal_id": 1,
@@ -115,45 +125,73 @@ Response:
         "goal_id": 2
       }
     ]
-  },
+  }
 ]
 
-#### Create new goal for specified user
+#### Create new goal, with or without steps, for specified user
 [POST] /api/goals/new-goal/:user_id
 Parameter: user_id
 Request body: 
-  {
-    "user_id": integer,
-    "goal_title": "string",
-    "steps": [
-        {
-            "step_title": "string",
-            "step_notes": "string"
-        }
-    ]
-    
-  }
   - Required: 
-    - user_id, goal_title
-    - if steps are being created:
-      - step_title (required for each step that is created)
-  - Optional: 
-    - steps(if no steps are being created), step_notes
-Response: 
+    - goal_title (string)
+
+  - Optional:
+    - goal_completed (boolean) - Defaults to false if not provided.
+    - steps (array of step objects) - Becomes required IF steps are created with goal.
+    - step_title (string) - Becomes required IF steps are created with goal, for each step object in list.
+    - step_notes (string) - An optional property of each step object
+    - step_completed (boolean) - An optional property of each step object. Defaults to false if not provided.
+
+  - Example 1: new goal without steps:
+  {
+    "goal_title": "New Goal Title"    
+  }
+
+  - Example 2: new goal with steps:
+  {
+    "goal_title": "New Goal Title",
+    "steps": [
+      {
+        "step_title": "Step #1 Title",
+        "step_completed": true
+      },
+      {
+        "step_title": "Step #2 Title",
+        "step_notes": "Step notes"
+      }
+    ]
+  }
+Response: Example 1 
   {
     "goal_id": 4,
     "user_id": 1,
-    "goal_title": "My new Goal",
+    "goal_title": "New Goal Title",
     "goal_completed": false,
-    "steps": {
-        "step_id": 4,
-        "goal_id": 4,
-        "step_title": "Step #1",
-        "step_notes": "This is your first step",
-        "step_completed": false
-    }
+    "steps": null
   }
-  - goal_completed, step_completed are false by default. Can be updated to true in edit goal endpoint.
+Response: Example 2
+  {
+    "goal_id": 4,
+    "user_id": 1,
+    "goal_title": "New Goal Title",
+    "goal_completed": false,
+    "steps": [
+      {
+        "step_id": 2,
+        "goal_id": 4,
+        "step_title": "Step #2 Title",
+        "step_notes": null
+        "step_completed": false
+      },
+      {
+        "step_id": 3,
+        "goal_id": 4,
+        "step_title": "Step #2 Title",
+        "step_notes": "Step notes",
+        "step_completed: false
+      }
+    ]
+  }
 
 #### Edit specified goal and/or it's associated steps
 [PUT] /api/goals/edit/:goal_id
