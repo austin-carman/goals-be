@@ -2,11 +2,16 @@ const router = require("express").Router();
 const User = require("../models/user-model");
 const tokenBuilder = require("../utils/token-builder");
 const bcrypt = require("bcryptjs");
-const { validateBody, validateUsername, validatePassword, isUsernameTaken } = require("../middleware/auth-middleware");
+const { 
+  validateBody,
+  validateUsername,
+  validatePassword,
+  isUsernameTaken 
+} = require("../middleware/auth-middleware");
 
 // Existing user login
 // eslint-disable-next-line no-unused-vars
-router.post("/login", validateBody, validateUsername, validatePassword, (req, res, next) => { 
+router.post("/login", validateUsername, validatePassword, (req, res, next) => { 
   const token = tokenBuilder(req.user);
   res.status(200).json({
     message: `Welcome back ${req.user.first_name}!`,
