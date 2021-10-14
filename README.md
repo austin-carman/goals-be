@@ -32,6 +32,7 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - Consider adding column to "goals" and "steps" tables for time created to avoid potential step order problems
 - ReadMe: add baseURL for User Router/Goals Router
 - Creating a new step: step_title is required for steps but if req.body includes, "steps": [], then no err. Should have error?
+- Editing a goal: 
 
 
 ## API Endpoint Documentation
@@ -196,7 +197,24 @@ Response: Example 2
 #### Edit specified goal and/or it's associated steps
 [PUT] /api/goals/edit/:goal_id
 Parameter: goal_id
-Request body: required properties + any editable properties
+Request body:
+  - Required:
+    - if editing goal properties (i.e. goal_title, goal_completed):
+      - goal_id (integer)
+    - if editing step properties (i.e. step_title, step_notes, step_completed):
+      - steps (array of step objects) - Each step being edited must be included as a step object in the steps array.
+      - step_id (integer) - Required property in each step objects for steps being edited.
+    - any properties that are being edited
+
+  - Optional:
+    - goal_title (string)
+    - goal_completed (boolean)
+    - steps (array of step objects that are edited) - Becomes required if editing any step object properties, along with step_id for each edited step object.
+    - step_title (string)
+    - step_notes (string)
+    - step_completed (boolean)
+
+  - Example #1 - edits made to goal and steps:
   {
     "goal_id": 1,
     "user_id": 1,
@@ -219,19 +237,39 @@ Request body: required properties + any editable properties
       }
     ]
   }
-  - Required: 
-    - if editing goal properties (i.e. goal_title, goal_completed)
-      - goal_id
-    - if editing step properties (i.e. step_title, step_notes, step_completed)
-      - step_id
-    - any properties that are being edited (see optional for list)
-      
-  - Optional: 
-    - goal_title, goal_completed, steps (step_id - unless step is being edited then required, step_title, step_notes, step_completed)
 
-Response: response body will contain properties that are being edited. 
-  e.g.#1 - Edited goal properties(goal_title, goal_completed) and step properties(step_title, step_notes, step_completed):
+  - Example #2 - Edits only to goal properties (goal_title, goal_completed):
+  {
+    "goal_id": 1,
+    "user_id": 1,
+    "goal_title": "Read 12 books this year",
+    "goal_completed": false,
+  }
 
+  - Example #3 - Edited only step properties (step_title, step_notes, step_completed):
+  {
+    "steps": [
+      {
+        "step_id": 1,
+        "step_title": "Pick 12 books to read",
+        "step_notes": null,
+        "step_completed": true,
+        "goal_id": 1
+      },
+      {
+        "step_id": 2,
+        "step_title": "Read 1 book this month",
+        "step_notes": "Read 30 minutes/day",
+        "step_completed": false,
+        "goal_id": 1
+      }
+    ]
+  }
+
+
+Response: 
+  - response body will contain properties that are being edited. e.g. if only goal properties are edited (ie: goal_title, goal_completed) then only goal properties will be in response body (pre-existing steps will not be in response body) OR if only step properties are edited (ie: step_title, step_notes, step_completed) then only step properties will be in response body.  
+  - Example #1 - edits made to goal and steps:
   {
     "goal_id": 1,
     "user_id": 1,
@@ -255,7 +293,7 @@ Response: response body will contain properties that are being edited.
     ]
   }
 
-  e.g.#2 - Edited only goal properties (goal_title, goal_completed):
+  - Example #2 - Edited only goal properties (goal_title, goal_completed):
   {
     "goal_id": 1,
     "user_id": 1,
@@ -263,7 +301,7 @@ Response: response body will contain properties that are being edited.
     "goal_completed": false,
   }
 
-  e.g.#3 - Edited only step properties (step_title, step_notes, step_completed):
+  - Example #3 - Edited only step properties (step_title, step_notes, step_completed):
   {
     "steps": [
       {
@@ -288,14 +326,16 @@ Response: response body will contain properties that are being edited.
 Parameter: goal_id
 Request body: none
 Response: Number of deleted goals
-  1 (1 goal was deleted)
+  - Example - 1 Goal deleted:
+    - 1
 
 #### Delete specified step
 [DELETE] /delete-step/:step_id
 Parameter: step_id
 Request body: none
 Response: Number of deleted steps
-  1 (1 step was deleted)
+  - Example: 1 step deleted:
+    - 1
 
 
 
