@@ -18,20 +18,18 @@ const validateGoalId =  async (req, res, next) => {
 
 const validateStepId =  async (req, res, next) => {
   const { step_id } = req.params;
-  try {
-    const step = await Goals.getStep(step_id);
-    if (!step || step.length === 0) {
-      res.json({
-        status: 404,
-        message: `Could not find step with id, ${step_id}`
-      });
-    } else {
-      next();
-    }
-  }
-  catch (err) {
-    next(err);
-  }
+  Goals.getStep(step_id)
+    .then(step => {
+      if (step === undefined) {
+        res.json({
+          status: 404,
+          message: `Could not find step with id, ${step_id}`
+        });
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
 };
 
 const validateNewGoal = (req, res, next) => {

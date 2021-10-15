@@ -11,7 +11,7 @@ async function getGoal(goal_id) {
 
 // Find step by step_id
 async function getStep(step_id) {
-  const step = await db("steps")
+  const [step] = await db("steps")
     .where("step_id", step_id);
 
   return step;
