@@ -117,25 +117,58 @@ const validateEditGoal = (req, res, next) => {
 const validateEditSteps = (req, res, next) => {
   if (req.body.steps === undefined) {
     return next();
+  } else if (!Array.isArray(req.body.steps)) {
+    res.json({
+      status: 400,
+      message: "steps must be array of step object(s)"
+    });
   }
 
   req.body.steps.map(step => {
-    if ((step.step_title || step.step_notes || (step.step_completed != undefined)) && !step.step_id) {
+    if (
+      (
+        step.step_title != undefined || 
+        step.step_notes != undefined || 
+        step.step_completed != undefined
+      ) && 
+      step.step_id === undefined
+    ) {
       res.json({
         status: 404,
-        message: "step_id is required to make edits to step_title, step_notes, and step_completed"
+        message: `step_id is required to make edits to step_title, 
+          step_notes, step_completed`
       });
-    } else if (step.step_title != undefined && typeof step.step_title != "string") {
+    } else if (
+      step.step_id != undefined && 
+      step.step_title === undefined && 
+      step.step_notes === undefined && 
+      step.step_completed === undefined
+    ) {
+      res.json({
+        status: 400,
+        message: `Please include editable property to edit step(s) 
+          (ie: step_title, step_notes, step_completed)`
+      });
+    } else if (
+      step.step_title != undefined && 
+      (typeof step.step_title != "string" || step.step_title === "")
+    ) {
       res.json({
         status: 404,
-        message: "step_title and step_notes must be a string"
+        message: "step_title must be a non-empty string"
       });
-    } else if (step.step_notes != undefined && typeof step.step_notes != "string") {
+    } else if (
+      step.step_notes != undefined && 
+      (typeof step.step_notes != "string" || step.step_notes === "")
+    ) {
       res.json({
         status: 404,
-        message: "step_title and step_notes must be a string"
+        message: "step_notes must be a non-empty string"
       });
-    } else if (step.step_completed != undefined && typeof step.step_completed != "boolean") {
+    } else if (
+      step.step_completed != undefined && 
+      typeof step.step_completed != "boolean"
+    ) {
       res.json({
         status: 404,
         message: "step_completed must be a boolean"
