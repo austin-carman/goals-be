@@ -87,11 +87,20 @@ const validateNewSteps = (req, res, next) => {
 
 const validateEditGoal = (req, res, next) => {
   const { goal_id, goal_title, goal_completed } = req.body;
-  if ((goal_title || goal_completed) && !goal_id) {
+  if ((goal_title || goal_completed) && goal_id === undefined) {
     res.json({
       status: 404,
       message: `goal_id is required to make edits 
         to goal_title and goal_completed`
+    });
+  } else if (
+    goal_id != undefined && 
+    (goal_title === undefined && goal_completed === undefined)
+  ) {
+    res.json({
+      status: 200,
+      message: `Must include editable properties with goal_id 
+        (ie: goal_title or goal_completed)`
     });
   } else if (
     goal_title != undefined && 
@@ -146,7 +155,7 @@ const validateEditSteps = (req, res, next) => {
     ) {
       res.json({
         status: 400,
-        message: `Please include editable property to edit step(s) 
+        message: `Must include editable property to edit step(s) 
           (ie: step_title, step_notes, step_completed)`
       });
     } else if (

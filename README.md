@@ -199,16 +199,16 @@ Parameter: goal_id
 Request body:
   - Required:
     - if editing goal properties (i.e. goal_title, goal_completed):
-      - goal_id (integer)
+      - goal_id (integer) plus editable goal properties
     - if editing step properties (i.e. step_title, step_notes, step_completed):
       - steps (array of step objects) - Each step being edited must be included as a step object in the steps array.
-      - step_id (integer) - Required property in each step objects for steps being edited.
-    - any properties that are being edited
+      - step_id (integer) - Required property in each step objects for steps being edited. Also must include editable properties in step object.
+    - any goal and/or step properties that are being edited
 
   - Optional:
     - goal_title (string)
     - goal_completed (boolean)
-    - steps (array of step objects that are edited) - Becomes required if editing any step object properties, along with step_id for each edited step object.
+    - steps (array of step objects that are edited) - Becomes required IF editing any step object properties, along with step_id for each edited step object.
     - step_title (string)
     - step_notes (string)
     - step_completed (boolean)
@@ -267,7 +267,10 @@ Request body:
 
 
 Response: 
-  - response body will contain properties that are being edited. e.g. if only goal properties are edited (ie: goal_title, goal_completed) then only goal properties will be in response body (pre-existing steps will not be in response body) OR if only step properties are edited (ie: step_title, step_notes, step_completed) then only step properties will be in response body.  
+  - response body will contain properties that are being edited. 
+    - if only goal properties are edited (ie: goal_title, goal_completed) then only goal properties will be in response body (pre-existing steps will not be in response body)
+    - if only step properties are edited (ie: step_title, step_notes, step_completed) then only step properties will be in response body. 
+     
   - Example #1 - edits made to goal and steps:
   {
     "goal_id": 1,
