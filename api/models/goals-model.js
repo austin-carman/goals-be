@@ -3,14 +3,6 @@ const {
   removeArrDuplicateItems
 } = require("../helper-functions/helper-functions");
 
-// Find user by user_id
-async function getUser(user_id) {
-  const [user] = await db("users")
-    .where("user_id", user_id);
-
-  return user;
-}
-
 // Find goal by goal_id
 async function getGoal(goal_id) {
   const [goal] = await db("goals")
@@ -190,7 +182,6 @@ async function deleteStep(step_id) {
 }
 
 module.exports = {
-  getUser,
   getGoal,
   getStep,
   getUserGoals,

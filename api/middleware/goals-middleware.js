@@ -1,8 +1,20 @@
 const Goals = require("../models/goals-model");
+const Users = require("../models/user-model");
 
 const validateUserId = (req, res, next) => {
   const { user_id } = req.params;
-  
+  Users.findUserBy({user_id})
+    .then(user => {
+      if (user === undefined) {
+        res.json({
+          status: 400,
+          message: `Could not find user with id, ${user_id}.`
+        });
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
 };
 
 const validateGoalId = (req, res, next) => { 

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Goals = require("../models/goals-model");
 const { restricted } = require("../middleware/auth-middleware");
 const {
+  validateUserId,
   validateGoalId,
   validateStepId,
   validateNewGoal,
@@ -13,7 +14,7 @@ const {
 // Get all goals for specified user
 // *** add middleware to check user_id
 // eslint-disable-next-line no-unused-vars
-router.get("/:user_id", restricted, (req, res, next) => {
+router.get("/:user_id", restricted, validateUserId, (req, res, next) => {
   Goals.getUserGoals(req.params.user_id)
     .then(goals => {
       res.json(goals);
