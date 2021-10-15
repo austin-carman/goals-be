@@ -35,7 +35,7 @@ async function getUserGoals(user_id) {
     )
     .where("g.user_id", user_id);
 
-  const steps = data.map(goal => { // all steps for all goals
+  const steps = data.map(goal => { // all steps for all goals belonging to user
     return {
       step_id: goal.step_id,
       step_title: goal.step_title,
