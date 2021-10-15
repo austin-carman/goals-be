@@ -61,7 +61,7 @@ const validateNewSteps = (req, res, next) => {
       res.json({
         status: 404,
         message: `step_title is required in step 
-        object and must be a non-empty string`
+          object and must be a non-empty string`
       }); 
     } else if (
       step.step_notes != undefined && 
@@ -90,14 +90,21 @@ const validateEditGoal = (req, res, next) => {
   if ((goal_title || goal_completed) && !goal_id) {
     res.json({
       status: 404,
-      message: "goal_id is required to make edits to goal_title and goal_completed"
+      message: `goal_id is required to make edits 
+        to goal_title and goal_completed`
     });
-  } else if (goal_title && typeof goal_title != "string") {
+  } else if (
+    goal_title != undefined && 
+    (typeof goal_title != "string" || goal_title === "")
+  ) {
     res.json({
       status: 404,
-      message: "goal_title must be a string"
+      message: "goal_title must be a non-empty string"
     });
-  } else if ((goal_completed != undefined) && typeof goal_completed != "boolean") {
+  } else if (
+    goal_completed != undefined && 
+    typeof goal_completed != "boolean"
+  ) {
     res.json({
       status: 404,
       message: "goal_completed must be a boolean"
