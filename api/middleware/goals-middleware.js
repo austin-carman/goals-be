@@ -1,6 +1,11 @@
 const Goals = require("../models/goals-model");
 
-const validateGoalId =  async (req, res, next) => { 
+const validateUserId = (req, res, next) => {
+  const { user_id } = req.params;
+  
+};
+
+const validateGoalId = (req, res, next) => { 
   const { goal_id } = req.params;
   Goals.getGoal(goal_id)
     .then(goal => {
@@ -16,7 +21,7 @@ const validateGoalId =  async (req, res, next) => {
     .catch(err => next(err));
 };
 
-const validateStepId =  async (req, res, next) => {
+const validateStepId = (req, res, next) => {
   const { step_id } = req.params;
   Goals.getStep(step_id)
     .then(step => {
@@ -187,6 +192,7 @@ const validateEditSteps = (req, res, next) => {
 };
 
 module.exports = {
+  validateUserId,
   validateGoalId,
   validateStepId,
   validateNewGoal,
