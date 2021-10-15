@@ -35,7 +35,7 @@ async function getUserGoals(user_id) {
     )
     .where("g.user_id", user_id);
 
-  const steps = data.map(goal => { // all steps for all goals belonging to user
+  const allSteps = data.map(goal => { // all steps for all goals belonging to user
     return {
       step_id: goal.step_id,
       step_title: goal.step_title,
@@ -46,10 +46,12 @@ async function getUserGoals(user_id) {
   });
 
   const sharedGoal = (goalId) => { // all steps for a single goal
-    const allSteps = steps.filter(obj => {
+    const steps = allSteps.filter(obj => {
       return obj.goal_id === goalId;
     });
-    return allSteps;
+    const sortedSteps = steps.sort((a,b) => (a.step_id > b.step_id) ? 1 : -1);
+
+    return sortedSteps;
   };
 
   const goals = data.map(goal => { // all goals with steps for that goal
