@@ -270,7 +270,7 @@ Response:
   - response body will contain properties that are being edited. 
     - if only goal properties are edited (ie: goal_title, goal_completed) then only goal properties will be in response body (pre-existing steps will not be in response body)
     - if only step properties are edited (ie: step_title, step_notes, step_completed) then only step properties will be in response body. 
-     
+
   - Example #1 - edits made to goal and steps:
   {
     "goal_id": 1,
@@ -323,12 +323,12 @@ Response:
     ]
   }
 
-#### Delete specified goal
+#### Delete specified goal and all associated steps
 [DELETE] /delete-goal/:goal_id
 Parameter: goal_id
 Request body: none
 Response: Number of deleted goals
-  - Example - 1 Goal deleted:
+  - Example - 1 Goal deleted (and all associated steps):
     - 1
 
 #### Delete specified step
