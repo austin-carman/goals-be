@@ -1,6 +1,23 @@
 const Goals = require("../models/goals-model");
+const Users = require("../models/user-model");
 
-const validateGoalId =  async (req, res, next) => { 
+const validateUserId = (req, res, next) => {
+  const { user_id } = req.params;
+  Users.findUserBy({user_id})
+    .then(user => {
+      if (user === undefined) {
+        res.json({
+          status: 400,
+          message: `Could not find user with id, ${user_id}.`
+        });
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
+};
+
+const validateGoalId = (req, res, next) => { 
   const { goal_id } = req.params;
   Goals.getGoal(goal_id)
     .then(goal => {
@@ -16,7 +33,7 @@ const validateGoalId =  async (req, res, next) => {
     .catch(err => next(err));
 };
 
-const validateStepId =  async (req, res, next) => {
+const validateStepId = (req, res, next) => {
   const { step_id } = req.params;
   Goals.getStep(step_id)
     .then(step => {
@@ -187,6 +204,7 @@ const validateEditSteps = (req, res, next) => {
 };
 
 module.exports = {
+  validateUserId,
   validateGoalId,
   validateStepId,
   validateNewGoal,
