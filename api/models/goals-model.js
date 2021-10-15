@@ -155,7 +155,6 @@ async function editGoal(goal_id, goal) {
     updatedGoal = editedGoal;
   }
 
-  
   let userGoal = {};
   if (updatedSteps.length > 0) {
     const sortedSteps = updatedSteps.sort((a,b) => {
