@@ -133,18 +133,17 @@ Request body:
     - goal_title (string)
 
   - Optional:
-    - goal_completed (boolean) - Defaults to false if not provided.
     - steps (array of step objects) - Becomes required IF steps are created with goal.
-    - step_title (string) - Becomes required IF steps are created with goal, for each step object in list.
+    - step_title (string) - Becomes required IF steps are created with goal. Required in each step object in steps list.
     - step_notes (string) - An optional property of each step object
     - step_completed (boolean) - An optional property of each step object. Defaults to false if not provided.
 
-  - Example 1: new goal without steps:
+  - Example 1 - new goal without steps:
   {
     "goal_title": "New Goal Title"    
   }
 
-  - Example 2: new goal with steps:
+  - Example 2 - new goal with steps:
   {
     "goal_title": "New Goal Title",
     "steps": [
@@ -158,7 +157,9 @@ Request body:
       }
     ]
   }
-Response: Example 1 
+
+Response: 
+  - Example 1 - created with no steps.
   {
     "goal_id": 4,
     "user_id": 1,
@@ -166,7 +167,9 @@ Response: Example 1
     "goal_completed": false,
     "steps": null
   }
-Response: Example 2
+
+Response: 
+  - Example 2: created with steps
   {
     "goal_id": 4,
     "user_id": 1,
@@ -176,9 +179,9 @@ Response: Example 2
       {
         "step_id": 2,
         "goal_id": 4,
-        "step_title": "Step #2 Title",
+        "step_title": "Step #1 Title",
         "step_notes": null
-        "step_completed": false
+        "step_completed": true
       },
       {
         "step_id": 3,
