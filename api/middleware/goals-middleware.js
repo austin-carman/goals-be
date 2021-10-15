@@ -2,20 +2,18 @@ const Goals = require("../models/goals-model");
 
 const validateGoalId =  async (req, res, next) => { 
   const { goal_id } = req.params;
-  try {
-    const goal = await Goals.getGoal(goal_id);
-    if (!goal || goal.length === 0) {
-      res.json({
-        status: 404,
-        message: `Could not find goal with id, ${goal_id}`
-      });
-    } else {
-      next();
-    }
-  }
-  catch (err) {
-    next(err);
-  }
+  Goals.getGoal(goal_id)
+    .then(goal => {
+      if (goal === undefined) {
+        res.json({
+          status: 404,
+          message: `Could not find goal with id, ${goal_id}`
+        });
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
 };
 
 const validateStepId =  async (req, res, next) => {

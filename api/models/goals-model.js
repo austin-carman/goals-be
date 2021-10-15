@@ -3,9 +3,9 @@ const { removeArrDuplicateItems } = require("../helper-functions/helper-function
 
 // Find goal by goal_id
 async function getGoal(goal_id) {
-  const goal = await db("goals")
+  const [goal] = await db("goals")
     .where("goal_id", goal_id);
-
+    
   return goal;
 }
 
