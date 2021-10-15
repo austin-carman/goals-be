@@ -84,45 +84,46 @@ Response:
 Parameter: user_id
 Request body: none
 Response:
-[
-  {
-    "goal_id": 1,
-    "user_id": 1,
-    "goal_title": "Read 12 books this year",
-    "goal_completed": false,
-    "steps": [
-      {
-        "step_id": 1,
-        "step_title": "Pick 12 books to read",
-        "step_notes": null,
-        "step_completed": true,
-        "goal_id": 1
-      },
-      {
-        "step_id": 2,
-        "step_title": "Read 1 book this month",
-        "step_notes": "Read 30 minutes/day",
-        "step_completed": false,
-        "goal_id": 1
-      }
-    ]
-  },
-  {
-    "goal_id": 2,
-    "user_id": 1,
-    "goal_title": "Save $1000",
-    "goal_completed": false,
-    "steps": [
-      {
-        "step_id": 3,
-        "step_title": "Create a budget",
-        "step_notes": null,
-        "step_completed": false,
-        "goal_id": 2
-      }
-    ]
-  }
-]
+  - Example:
+  [
+    {
+      "goal_id": 1,
+      "user_id": 1,
+      "goal_title": "Read 12 books this year",
+      "goal_completed": false,
+      "steps": [
+        {
+          "step_id": 1,
+          "step_title": "Pick 12 books to read",
+          "step_notes": null,
+          "step_completed": true,
+          "goal_id": 1
+        },
+        {
+          "step_id": 2,
+          "step_title": "Read 1 book this month",
+          "step_notes": "Read 30 minutes/day",
+          "step_completed": false,
+          "goal_id": 1
+        }
+      ]
+    },
+    {
+      "goal_id": 2,
+      "user_id": 1,
+      "goal_title": "Save $1000",
+      "goal_completed": false,
+      "steps": [
+        {
+          "step_id": 3,
+          "step_title": "Create a budget",
+          "step_notes": null,
+          "step_completed": false,
+          "goal_id": 2
+        }
+      ]
+    }
+  ]
 
 #### Create new goal, with or without steps, for specified user
 [POST] /api/goals/new-goal/:user_id
@@ -132,18 +133,17 @@ Request body:
     - goal_title (string)
 
   - Optional:
-    - goal_completed (boolean) - Defaults to false if not provided.
     - steps (array of step objects) - Becomes required IF steps are created with goal.
-    - step_title (string) - Becomes required IF steps are created with goal, for each step object in list.
+    - step_title (string) - Becomes required IF steps are created with goal. Required in each step object in steps list.
     - step_notes (string) - An optional property of each step object
     - step_completed (boolean) - An optional property of each step object. Defaults to false if not provided.
 
-  - Example 1: new goal without steps:
+  - Example 1 - new goal without steps:
   {
     "goal_title": "New Goal Title"    
   }
 
-  - Example 2: new goal with steps:
+  - Example 2 - new goal with steps:
   {
     "goal_title": "New Goal Title",
     "steps": [
@@ -157,7 +157,9 @@ Request body:
       }
     ]
   }
-Response: Example 1 
+
+Response: 
+  - Example 1 - created with no steps.
   {
     "goal_id": 4,
     "user_id": 1,
@@ -165,7 +167,9 @@ Response: Example 1
     "goal_completed": false,
     "steps": null
   }
-Response: Example 2
+
+Response: 
+  - Example 2: created with steps
   {
     "goal_id": 4,
     "user_id": 1,
@@ -175,9 +179,9 @@ Response: Example 2
       {
         "step_id": 2,
         "goal_id": 4,
-        "step_title": "Step #2 Title",
+        "step_title": "Step #1 Title",
         "step_notes": null
-        "step_completed": false
+        "step_completed": true
       },
       {
         "step_id": 3,
@@ -195,16 +199,16 @@ Parameter: goal_id
 Request body:
   - Required:
     - if editing goal properties (i.e. goal_title, goal_completed):
-      - goal_id (integer)
+      - goal_id (integer) plus editable goal properties
     - if editing step properties (i.e. step_title, step_notes, step_completed):
       - steps (array of step objects) - Each step being edited must be included as a step object in the steps array.
-      - step_id (integer) - Required property in each step objects for steps being edited.
-    - any properties that are being edited
+      - step_id (integer) - Required property in each step objects for steps being edited. Also must include editable properties in step object.
+    - any goal and/or step properties that are being edited
 
   - Optional:
     - goal_title (string)
     - goal_completed (boolean)
-    - steps (array of step objects that are edited) - Becomes required if editing any step object properties, along with step_id for each edited step object.
+    - steps (array of step objects that are edited) - Becomes required IF editing any step object properties, along with step_id for each edited step object.
     - step_title (string)
     - step_notes (string)
     - step_completed (boolean)
@@ -263,7 +267,10 @@ Request body:
 
 
 Response: 
-  - response body will contain properties that are being edited. e.g. if only goal properties are edited (ie: goal_title, goal_completed) then only goal properties will be in response body (pre-existing steps will not be in response body) OR if only step properties are edited (ie: step_title, step_notes, step_completed) then only step properties will be in response body.  
+  - response body will contain properties that are being edited. 
+    - if only goal properties are edited (ie: goal_title, goal_completed) then only goal properties will be in response body (pre-existing steps will not be in response body)
+    - if only step properties are edited (ie: step_title, step_notes, step_completed) then only step properties will be in response body. 
+
   - Example #1 - edits made to goal and steps:
   {
     "goal_id": 1,
@@ -316,12 +323,12 @@ Response:
     ]
   }
 
-#### Delete specified goal
+#### Delete specified goal and all associated steps
 [DELETE] /delete-goal/:goal_id
 Parameter: goal_id
 Request body: none
 Response: Number of deleted goals
-  - Example - 1 Goal deleted:
+  - Example - 1 Goal deleted (and all associated steps):
     - 1
 
 #### Delete specified step

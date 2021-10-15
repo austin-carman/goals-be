@@ -11,6 +11,8 @@ const {
 } = require("../middleware/goals-middleware");
 
 // Get all goals for specified user
+// *** add middleware to check user_id
+// eslint-disable-next-line no-unused-vars
 router.get("/:user_id", restricted, (req, res, next) => {
   Goals.getUserGoals(req.params.user_id)
     .then(goals => {
@@ -20,39 +22,63 @@ router.get("/:user_id", restricted, (req, res, next) => {
 });
 
 // Create a new goal for specified user
-router.post("/new-goal/:user_id", restricted, validateNewGoal, validateNewSteps, (req, res, next) => { 
-  Goals.newGoal(req.params.user_id, req.body)
-    .then(goal => {
-      res.json(goal);
-    })
-    .catch(err => console.log(err));
-});
+// *** add middleware to check user_id
+router.post(
+  "/new-goal/:user_id", 
+  restricted, 
+  validateNewGoal, 
+  validateNewSteps, 
+  (req, res, next) => { // eslint-disable-line no-unused-vars
+    Goals.newGoal(req.params.user_id, req.body)
+      .then(goal => {
+        res.json(goal);
+      })
+      .catch(err => console.log(err));
+  }
+);
 
 // Edit existing specified goal
-router.put("/edit/:goal_id", restricted, validateGoalId, validateEditGoal, validateEditSteps, (req, res, next) => {
-  Goals.editGoal(req.params.goal_id, req.body)
-    .then(goal => {
-      res.json(goal);
-    })
-    .catch(err => console.log(err));
-});
+router.put(
+  "/edit/:goal_id", 
+  restricted, 
+  validateGoalId, 
+  validateEditGoal, 
+  validateEditSteps, 
+  (req, res, next) => { // eslint-disable-line no-unused-vars
+    Goals.editGoal(req.params.goal_id, req.body)
+      .then(goal => {
+        res.json(goal);
+      })
+      .catch(err => console.log(err));
+  }
+);
 
 // Delete specified goal and all associated steps
-router.delete("/delete-goal/:goal_id", restricted, validateGoalId, (req, res, next) => {
-  Goals.deleteGoal(req.params.goal_id)
-    .then(deleted => {
-      res.status(200).json(deleted);
-    })
-    .catch(err => console.log(err));
-});
+router.delete(
+  "/delete-goal/:goal_id", 
+  restricted, 
+  validateGoalId, 
+  (req, res, next) => { // eslint-disable-line no-unused-vars
+    Goals.deleteGoal(req.params.goal_id)
+      .then(deleted => {
+        res.status(200).json(deleted);
+      })
+      .catch(err => console.log(err));
+  }
+);
 
 // Delete specified step
-router.delete("/delete-step/:step_id", restricted, validateStepId, (req, res, next) => {
-  Goals.deleteStep(req.params.step_id)
-    .then(deleted => {
-      res.status(200).json(deleted);
-    })
-    .catch(err => console.log(err));
-});
+router.delete(
+  "/delete-step/:step_id", 
+  restricted, 
+  validateStepId, 
+  (req, res, next) => { // eslint-disable-line no-unused-vars
+    Goals.deleteStep(req.params.step_id)
+      .then(deleted => {
+        res.status(200).json(deleted);
+      })
+      .catch(err => console.log(err));
+  }
+);
 
 module.exports = router;
