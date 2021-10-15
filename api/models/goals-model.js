@@ -1,5 +1,7 @@
 const db = require("../../data/db-config");
-const { removeArrDuplicateItems } = require("../helper-functions/helper-functions");
+const {
+  removeArrDuplicateItems
+} = require("../helper-functions/helper-functions");
 
 // Find goal by goal_id
 async function getGoal(goal_id) {
@@ -61,13 +63,6 @@ async function getUserGoals(user_id) {
   });
 
   const userGoals = removeArrDuplicateItems(goals); 
-  /*
-    This ^^^ is a temporary fix:
-    Removes duplicate goals due to a new goal obj created 
-    for each step in that goal. Problem may arise from
-    .select() in db call. Find a better way to fix this 
-    issue.
-  */
 
   return userGoals;
 }
