@@ -49,22 +49,34 @@ const validateNewGoal = (req, res, next) => {
 
 const validateNewSteps = (req, res, next) => {
   const { steps } = req.body;
-  if (!steps) {
+  if (steps === undefined) {
     return next();
+  } else if (!Array.isArray(steps)) {
+    res.json({
+      status: 400,
+      message: "steps must be array of step objects"
+    });
   }
 
   steps.map(step => {
     if (!step.step_title || typeof step.step_title != "string") {
       res.json({
         status: 404,
-        message: "step_title is required for creating steps, must be a string"
-      });
-    } else if (step.step_notes === "" || (step.step_notes && typeof step.step_notes != "string")) {
+        message: `step_title is required in step 
+        object and must be a non-empty string`
+      }); 
+    } else if (
+      step.step_notes != undefined && 
+      (typeof step.step_notes != "string" || step.step_notes === "")
+    ) {
       res.json({
         status: 404,
         message: "step_notes must be a non-empty string"
       });
-    } else if (step.step_completed && typeof step.step_completed != "boolean") {
+    } else if (
+      step.step_completed != undefined && 
+      typeof step.step_completed != "boolean"
+    ) {
       res.json({
         status: 404,
         message: "step_completed must be a boolean"
