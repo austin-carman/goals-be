@@ -84,45 +84,46 @@ Response:
 Parameter: user_id
 Request body: none
 Response:
-[
-  {
-    "goal_id": 1,
-    "user_id": 1,
-    "goal_title": "Read 12 books this year",
-    "goal_completed": false,
-    "steps": [
-      {
-        "step_id": 1,
-        "step_title": "Pick 12 books to read",
-        "step_notes": null,
-        "step_completed": true,
-        "goal_id": 1
-      },
-      {
-        "step_id": 2,
-        "step_title": "Read 1 book this month",
-        "step_notes": "Read 30 minutes/day",
-        "step_completed": false,
-        "goal_id": 1
-      }
-    ]
-  },
-  {
-    "goal_id": 2,
-    "user_id": 1,
-    "goal_title": "Save $1000",
-    "goal_completed": false,
-    "steps": [
-      {
-        "step_id": 3,
-        "step_title": "Create a budget",
-        "step_notes": null,
-        "step_completed": false,
-        "goal_id": 2
-      }
-    ]
-  }
-]
+  - Example:
+  [
+    {
+      "goal_id": 1,
+      "user_id": 1,
+      "goal_title": "Read 12 books this year",
+      "goal_completed": false,
+      "steps": [
+        {
+          "step_id": 1,
+          "step_title": "Pick 12 books to read",
+          "step_notes": null,
+          "step_completed": true,
+          "goal_id": 1
+        },
+        {
+          "step_id": 2,
+          "step_title": "Read 1 book this month",
+          "step_notes": "Read 30 minutes/day",
+          "step_completed": false,
+          "goal_id": 1
+        }
+      ]
+    },
+    {
+      "goal_id": 2,
+      "user_id": 1,
+      "goal_title": "Save $1000",
+      "goal_completed": false,
+      "steps": [
+        {
+          "step_id": 3,
+          "step_title": "Create a budget",
+          "step_notes": null,
+          "step_completed": false,
+          "goal_id": 2
+        }
+      ]
+    }
+  ]
 
 #### Create new goal, with or without steps, for specified user
 [POST] /api/goals/new-goal/:user_id
