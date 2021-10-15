@@ -12,7 +12,6 @@ const {
 } = require("../middleware/goals-middleware");
 
 // Get all goals for specified user
-// *** add middleware to check user_id
 // eslint-disable-next-line no-unused-vars
 router.get("/:user_id", restricted, validateUserId, (req, res, next) => {
   Goals.getUserGoals(req.params.user_id)
@@ -23,10 +22,10 @@ router.get("/:user_id", restricted, validateUserId, (req, res, next) => {
 });
 
 // Create a new goal for specified user
-// *** add middleware to check user_id
 router.post(
   "/new-goal/:user_id", 
-  restricted, 
+  restricted,
+  validateUserId, 
   validateNewGoal, 
   validateNewSteps, 
   (req, res, next) => { // eslint-disable-line no-unused-vars
