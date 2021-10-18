@@ -4,22 +4,22 @@ const jwt = require("jsonwebtoken");
 
 const validateBody = (req, res, next) => {
   const { first_name, last_name, username, password } = req.body;
-  if ( 
+  if (
     first_name === undefined ||
-    first_name === "" || 
-    last_name === undefined || 
+    first_name === "" ||
+    last_name === undefined ||
     last_name === "" ||
-    username === undefined || 
+    username === undefined ||
     password === undefined
   ) {
     next({
       status: 400,
-      message: "Please fill out all required fields"
+      message: "Please fill out all required fields",
     });
-  } else if ( username.length < 3 || password.length < 3 ) {
+  } else if (username.length < 3 || password.length < 3) {
     next({
       status: 400,
-      message: "Username and password must be at least 3 characters in length."
+      message: "Username and password must be at least 3 characters in length.",
     });
   } else {
     next();
@@ -29,18 +29,17 @@ const validateBody = (req, res, next) => {
 const validateUsername = async (req, res, next) => {
   const { username } = req.body;
   try {
-    const user = await User.findUserBy({username});
+    const user = await User.findUserBy({ username });
     if (user === undefined) {
       res.json({
         status: 401,
-        message: "Invalid username or password"
+        message: "Invalid username or password",
       });
     } else {
       req.user = user;
       next();
     }
-  }
-  catch (err) {
+  } catch (err) {
     next(err);
   }
 };
@@ -49,22 +48,22 @@ const validatePassword = (req, res, next) => {
   if (bcrypt.compareSync(req.body.password, req.user.password)) {
     next();
   } else {
-    next({ 
-      status: 401, 
-      message: "Invalid username or password" 
+    next({
+      status: 401,
+      message: "Invalid username or password",
     });
   }
 };
 
 const isUsernameTaken = async (req, res, next) => {
   const { username } = req.body;
-  const user = await User.findUserBy({username});
+  const user = await User.findUserBy({ username });
   if (user === undefined) {
     next();
   } else {
     next({
       status: 403,
-      message: `${username}, already taken. Please choose another username.`
+      message: `${username}, already taken. Please choose another username.`,
     });
   }
 };
@@ -83,12 +82,12 @@ const restricted = (req, res, next) => {
   } else {
     res.status(401).json({ message: "Valid token required" });
   }
-}; 
+};
 
 module.exports = {
   validateBody,
   validateUsername,
   validatePassword,
   isUsernameTaken,
-  restricted
+  restricted,
 };

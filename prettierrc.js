@@ -7,4 +7,3 @@ module.exports = {
   bracketSameLine: false,
   arrowParens: "always",
 };
-  

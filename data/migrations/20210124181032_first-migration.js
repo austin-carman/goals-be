@@ -9,7 +9,8 @@ exports.up = async (knex) => {
     })
     .createTable("goals", (goals) => {
       goals.increments("goal_id");
-      goals.integer("user_id")
+      goals
+        .integer("user_id")
         .references("user_id")
         .inTable("users")
         .notNullable()
@@ -21,7 +22,8 @@ exports.up = async (knex) => {
     })
     .createTable("steps", (steps) => {
       steps.increments("step_id");
-      steps.integer("goal_id")
+      steps
+        .integer("goal_id")
         .references("goal_id")
         .inTable("goals")
         .notNullable()

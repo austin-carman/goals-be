@@ -1,20 +1,18 @@
 const db = require("../../data/db-config");
 const {
-  removeArrDuplicateItems
+  removeArrDuplicateItems,
 } = require("../helper-functions/helper-functions");
 
 // Find goal by goal_id
 async function getGoal(goal_id) {
-  const [goal] = await db("goals")
-    .where("goal_id", goal_id);
-    
+  const [goal] = await db("goals").where("goal_id", goal_id);
+
   return goal;
 }
 
 // Find step by step_id
 async function getStep(step_id) {
-  const [step] = await db("steps")
-    .where("step_id", step_id);
+  const [step] = await db("steps").where("step_id", step_id);
 
   return step;
 }
@@ -24,47 +22,50 @@ async function getUserGoals(user_id) {
   const data = await db("goals as g")
     .leftJoin("steps as s", "g.goal_id", "=", "s.goal_id")
     .select(
-      "g.goal_id", 
-      "g.user_id", 
-      "g.goal_title", 
-      "g.goal_completed", 
-      "s.step_id", 
-      "s.step_title", 
+      "g.goal_id",
+      "g.user_id",
+      "g.goal_title",
+      "g.goal_completed",
+      "s.step_id",
+      "s.step_title",
       "s.step_notes",
       "s.step_completed"
     )
     .where("g.user_id", user_id);
 
-  const allSteps = data.map(goal => { // all steps for all goals belonging to user
+  const allSteps = data.map((goal) => {
+    // all steps for all goals belonging to user
     return {
       step_id: goal.step_id,
       step_title: goal.step_title,
       step_notes: goal.step_notes,
       step_completed: goal.step_completed,
-      goal_id: goal.goal_id
+      goal_id: goal.goal_id,
     };
   });
 
-  const sharedGoal = (goalId) => { // all steps for a single goal
-    const steps = allSteps.filter(obj => {
+  const sharedGoal = (goalId) => {
+    // all steps for a single goal
+    const steps = allSteps.filter((obj) => {
       return obj.goal_id === goalId;
     });
-    const sortedSteps = steps.sort((a,b) => (a.step_id > b.step_id) ? 1 : -1);
+    const sortedSteps = steps.sort((a, b) => (a.step_id > b.step_id ? 1 : -1));
 
     return sortedSteps;
   };
 
-  const goals = data.map(goal => { // all goals with steps for that goal
+  const goals = data.map((goal) => {
+    // all goals with steps for that goal
     return {
       goal_id: goal.goal_id,
       user_id: goal.user_id,
       goal_title: goal.goal_title,
       goal_completed: goal.goal_completed,
-      steps: sharedGoal(goal.goal_id)
+      steps: sharedGoal(goal.goal_id),
     };
   });
 
-  const userGoals = removeArrDuplicateItems(goals); 
+  const userGoals = removeArrDuplicateItems(goals);
 
   return userGoals;
 }
@@ -72,34 +73,25 @@ async function getUserGoals(user_id) {
 // Create new goal for specified user
 async function newGoal(user_id, goal) {
   const { goal_title, steps } = goal;
-  const [addedGoal] = await db("goals")
-    .insert({
+  const [addedGoal] = await db("goals").insert(
+    {
       user_id: user_id,
-      goal_title: goal_title
+      goal_title: goal_title,
     },
-    [
-      "goal_id",
-      "user_id",
-      "goal_title",
-      "goal_completed"
-    ]);
+    ["goal_id", "user_id", "goal_title", "goal_completed"]
+  );
 
   const newSteps = [];
   if (steps != undefined) {
-    await Promise.all(steps.map(async step => { 
-      const [addedStep] = await db("steps")
-        .insert(
-          {...step, goal_id: addedGoal.goal_id},
-          [
-            "step_id", 
-            "goal_id",
-            "step_title",
-            "step_notes",
-            "step_completed"
-          ]
+    await Promise.all(
+      steps.map(async (step) => {
+        const [addedStep] = await db("steps").insert(
+          { ...step, goal_id: addedGoal.goal_id },
+          ["step_id", "goal_id", "step_title", "step_notes", "step_completed"]
         );
-      newSteps.push(addedStep);
-    }));
+        newSteps.push(addedStep);
+      })
+    );
   }
 
   const userGoal = {
@@ -107,7 +99,7 @@ async function newGoal(user_id, goal) {
     user_id: addedGoal.user_id,
     goal_title: addedGoal.goal_title,
     goal_completed: addedGoal.goal_completed,
-    steps: newSteps.length > 0 ? newSteps : null
+    steps: newSteps.length > 0 ? newSteps : null,
   };
 
   return userGoal;
@@ -118,49 +110,42 @@ async function editGoal(goal_id, goal) {
   const updatedSteps = [];
   if (goal.steps) {
     const { steps } = goal;
-    await Promise.all(steps.map(async step => {
-      const [editedStep] = await db("steps")
-        .where("step_id", step.step_id)
-        .update({
-          step_title: step.step_title,
-          step_notes: step.step_notes,
-          step_completed: step.step_completed
-        },
-        [
-          "step_id",
-          "goal_id",
-          "step_title",
-          "step_notes",
-          "step_completed"
-        ]);
-      updatedSteps.push(editedStep);
-    }));
+    await Promise.all(
+      steps.map(async (step) => {
+        const [editedStep] = await db("steps")
+          .where("step_id", step.step_id)
+          .update(
+            {
+              step_title: step.step_title,
+              step_notes: step.step_notes,
+              step_completed: step.step_completed,
+            },
+            ["step_id", "goal_id", "step_title", "step_notes", "step_completed"]
+          );
+        updatedSteps.push(editedStep);
+      })
+    );
   }
 
   let updatedGoal = {};
   if (goal.goal_title != undefined || goal.goal_completed != undefined) {
     const { goal_title, goal_completed } = goal;
-    const [editedGoal] = await db("goals")
-      .where("goal_id", goal_id)
-      .update({
+    const [editedGoal] = await db("goals").where("goal_id", goal_id).update(
+      {
         goal_title: goal_title,
-        goal_completed: goal_completed
-      }, 
-      [
-        "goal_id",
-        "user_id",
-        "goal_title",
-        "goal_completed"
-      ]);
+        goal_completed: goal_completed,
+      },
+      ["goal_id", "user_id", "goal_title", "goal_completed"]
+    );
     updatedGoal = editedGoal;
   }
 
   let userGoal = {};
   if (updatedSteps.length > 0) {
-    const sortedSteps = updatedSteps.sort((a,b) => {
-      (a.step_id > b.step_id) ? 1 : -1;
+    const sortedSteps = updatedSteps.sort((a, b) => {
+      a.step_id > b.step_id ? 1 : -1;
     });
-    userGoal = {...updatedGoal, steps: sortedSteps}; 
+    userGoal = { ...updatedGoal, steps: sortedSteps };
   } else {
     userGoal = updatedGoal;
   }
@@ -170,18 +155,14 @@ async function editGoal(goal_id, goal) {
 
 // Delete specified goal and all associated steps
 async function deleteGoal(goal_id) {
-  const goal = await db("goals")
-    .where("goal_id", goal_id)
-    .del([]);
+  const goal = await db("goals").where("goal_id", goal_id).del([]);
 
   return goal;
 }
 
 // Delete specified step
 async function deleteStep(step_id) {
-  const step = await db("steps")
-    .where("step_id", step_id)
-    .del([]);
+  const step = await db("steps").where("step_id", step_id).del([]);
 
   return step;
 }
@@ -193,5 +174,5 @@ module.exports = {
   newGoal,
   editGoal,
   deleteGoal,
-  deleteStep
+  deleteStep,
 };

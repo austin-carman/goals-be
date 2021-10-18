@@ -1,18 +1,16 @@
 const db = require("../../data/db-config");
 
 async function findUserBy(filter) {
-  const [user] = await db("users")
-    .where(filter);
+  const [user] = await db("users").where(filter);
   return user;
 }
 
 async function createUser({ first_name, last_name, username, password }) {
-  const newUser = await db.transaction(async trx => {
-    const [result] = await trx("users")
-      .insert(
-        { first_name, last_name, username, password }, 
-        ["user_id", "first_name", "last_name", "username"]
-      );
+  const newUser = await db.transaction(async (trx) => {
+    const [result] = await trx("users").insert(
+      { first_name, last_name, username, password },
+      ["user_id", "first_name", "last_name", "username"]
+    );
     return result;
   });
   return newUser;
@@ -20,5 +18,5 @@ async function createUser({ first_name, last_name, username, password }) {
 
 module.exports = {
   findUserBy,
-  createUser
+  createUser,
 };
