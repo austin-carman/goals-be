@@ -21,16 +21,16 @@ server.get("/", (req, res) => {
 
 server.get("*", (req, res) => {
   res.status(404).json({
-    message: "not found"
+    message: "not found",
   });
 });
 
 // Error Handler
-server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+server.use((err, req, res, next) => {
   res.json({
     status: 500,
     message: err.message,
-    error: err.stack
+    error: err.stack,
   });
 });
 

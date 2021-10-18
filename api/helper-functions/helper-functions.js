@@ -7,5 +7,5 @@ const removeArrDuplicateItems = (arr) => {
 };
 
 module.exports = {
-  removeArrDuplicateItems
+  removeArrDuplicateItems,
 };
