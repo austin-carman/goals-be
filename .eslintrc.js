@@ -1,16 +1,16 @@
 module.exports = {
-  "env": {
-    "commonjs": true,
-    "es2021": true,
-    "node": true
+  env: {
+    commonjs: true,
+    es2021: true,
+    node: true,
   },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "ecmaVersion": 12
+  extends: ["eslint:recommended", "plugin:prettier/recommended"],
+  parserOptions: {
+    ecmaVersion: 12,
   },
-  "rules": {
-    "indent": ["error", 2],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"],
-  }
+  rules: {
+    indent: ["error", 2],
+    quotes: ["error", "double"],
+    semi: ["error", "always"],
+  },
 };
