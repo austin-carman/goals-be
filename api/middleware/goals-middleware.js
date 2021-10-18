@@ -24,7 +24,7 @@ const validateGoalId = (req, res, next) => {
       if (goal === undefined) {
         res.json({
           status: 404,
-          message: `Could not find goal with id, ${goal_id}`
+          message: `Could not find goal with id, ${goal_id}.`
         });
       } else {
         next();
@@ -40,7 +40,7 @@ const validateStepId = (req, res, next) => {
       if (step === undefined) {
         res.json({
           status: 404,
-          message: `Could not find step with id, ${step_id}`
+          message: `Could not find step with id, ${step_id}.`
         });
       } else {
         next();
@@ -67,7 +67,7 @@ const validateNewSteps = (req, res, next) => {
   } else if (!Array.isArray(steps)) {
     res.json({
       status: 400,
-      message: "steps must be array of step objects"
+      message: "steps must be array of step objects."
     });
   }
 
@@ -75,8 +75,7 @@ const validateNewSteps = (req, res, next) => {
     if (!step.step_title || typeof step.step_title != "string") {
       res.json({
         status: 404,
-        message: `step_title is required in step 
-          object and must be a non-empty string`
+        message: "step_title is required in step object and must be a non-empty string."
       }); 
     } else if (
       step.step_notes != undefined && 
@@ -84,7 +83,7 @@ const validateNewSteps = (req, res, next) => {
     ) {
       res.json({
         status: 404,
-        message: "step_notes must be a non-empty string"
+        message: "step_notes must be a non-empty string."
       });
     } else if (
       step.step_completed != undefined && 
@@ -92,7 +91,7 @@ const validateNewSteps = (req, res, next) => {
     ) {
       res.json({
         status: 404,
-        message: "step_completed must be a boolean"
+        message: "step_completed must be a boolean."
       });
     }
   });
@@ -105,8 +104,7 @@ const validateEditGoal = (req, res, next) => {
   if ((goal_title || goal_completed) && goal_id === undefined) {
     res.json({
       status: 404,
-      message: `goal_id is required to make edits 
-        to goal_title and goal_completed`
+      message: "goal_id is required to make edits to goal_title and goal_completed."
     });
   } else if (
     goal_id != undefined && 
@@ -114,8 +112,7 @@ const validateEditGoal = (req, res, next) => {
   ) {
     res.json({
       status: 200,
-      message: `Must include editable properties with goal_id 
-        (ie: goal_title or goal_completed)`
+      message: "Must include editable properties with goal_id (ie: goal_title or goal_completed)."
     });
   } else if (
     goal_title != undefined && 
@@ -123,7 +120,7 @@ const validateEditGoal = (req, res, next) => {
   ) {
     res.json({
       status: 404,
-      message: "goal_title must be a non-empty string"
+      message: "goal_title must be a non-empty string."
     });
   } else if (
     goal_completed != undefined && 
@@ -131,7 +128,7 @@ const validateEditGoal = (req, res, next) => {
   ) {
     res.json({
       status: 404,
-      message: "goal_completed must be a boolean"
+      message: "goal_completed must be a boolean."
     });
   }
 
@@ -144,7 +141,7 @@ const validateEditSteps = (req, res, next) => {
   } else if (!Array.isArray(req.body.steps)) {
     res.json({
       status: 400,
-      message: "steps must be array of step object(s)"
+      message: "steps must be array of step object(s)."
     });
   }
 
@@ -159,8 +156,7 @@ const validateEditSteps = (req, res, next) => {
     ) {
       res.json({
         status: 404,
-        message: `step_id is required to make edits to step_title, 
-          step_notes, step_completed`
+        message: "step_id is required to make edits to step_title, step_notes, step_completed."
       });
     } else if (
       step.step_id != undefined && 
@@ -170,8 +166,7 @@ const validateEditSteps = (req, res, next) => {
     ) {
       res.json({
         status: 400,
-        message: `Must include editable property to edit step(s) 
-          (ie: step_title, step_notes, step_completed)`
+        message: "Must include editable property to edit step(s) (ie: step_title, step_notes, step_completed)."
       });
     } else if (
       step.step_title != undefined && 
@@ -179,7 +174,7 @@ const validateEditSteps = (req, res, next) => {
     ) {
       res.json({
         status: 404,
-        message: "step_title must be a non-empty string"
+        message: "step_title must be a non-empty string."
       });
     } else if (
       step.step_notes != undefined && 
@@ -187,7 +182,7 @@ const validateEditSteps = (req, res, next) => {
     ) {
       res.json({
         status: 404,
-        message: "step_notes must be a non-empty string"
+        message: "step_notes must be a non-empty string."
       });
     } else if (
       step.step_completed != undefined && 
@@ -195,7 +190,7 @@ const validateEditSteps = (req, res, next) => {
     ) {
       res.json({
         status: 404,
-        message: "step_completed must be a boolean"
+        message: "step_completed must be a boolean."
       });
     }
   });

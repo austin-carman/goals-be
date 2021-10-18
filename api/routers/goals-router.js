@@ -12,8 +12,7 @@ const {
 } = require("../middleware/goals-middleware");
 
 // Get all goals for specified user
-// eslint-disable-next-line no-unused-vars
-router.get("/:user_id", restricted, validateUserId, (req, res, next) => {
+router.get("/:user_id", restricted, validateUserId, (req, res, next) => { // eslint-disable-line no-unused-vars
   Goals.getUserGoals(req.params.user_id)
     .then(goals => {
       res.json(goals);

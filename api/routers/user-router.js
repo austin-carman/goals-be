@@ -10,8 +10,7 @@ const {
 } = require("../middleware/auth-middleware");
 
 // Existing user login
-// eslint-disable-next-line no-unused-vars
-router.post("/login", validateUsername, validatePassword, (req, res, next) => {
+router.post("/login", validateUsername, validatePassword, (req, res, next) => { // eslint-disable-line no-unused-vars
   const token = tokenBuilder(req.user);
   res.status(200).json({
     message: `Welcome back ${req.user.first_name}!`,
