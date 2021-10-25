@@ -13,6 +13,11 @@ exports.seed = function (knex) {
           user_id: 1,
           goal_title: "Save $1000",
         },
+        {
+          user_id: 1,
+          goal_title: "Meal Prep",
+          goal_completed: true,
+        },
       ]);
     });
 };
