@@ -78,13 +78,8 @@ const validateNewSteps = (req, res, next) => {
         message:
           "step_title is required in step object and must be a non-empty string.",
       });
-    } else if (!step.step_notes) {
-      res.json({
-        status: 404,
-        message: "step_notes must be a non-empty string.",
-      });
     } else if (
-      step.step_completed != undefined &&
+      step.step_completed !== undefined &&
       typeof step.step_completed != "boolean"
     ) {
       res.json({
