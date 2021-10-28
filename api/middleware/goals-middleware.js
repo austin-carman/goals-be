@@ -62,7 +62,7 @@ const validateNewGoal = (req, res, next) => {
 
 const validateNewSteps = (req, res, next) => {
   const { steps } = req.body;
-  if (steps === undefined) {
+  if (!steps) {
     return next();
   } else if (!Array.isArray(steps)) {
     res.json({
@@ -72,22 +72,14 @@ const validateNewSteps = (req, res, next) => {
   }
 
   steps.map((step) => {
-    if (!step.step_title || typeof step.step_title != "string") {
+    if (!step.step_title) {
       res.json({
         status: 404,
         message:
           "step_title is required in step object and must be a non-empty string.",
       });
     } else if (
-      step.step_notes != undefined &&
-      (typeof step.step_notes != "string" || step.step_notes === "")
-    ) {
-      res.json({
-        status: 404,
-        message: "step_notes must be a non-empty string.",
-      });
-    } else if (
-      step.step_completed != undefined &&
+      step.step_completed !== undefined &&
       typeof step.step_completed != "boolean"
     ) {
       res.json({

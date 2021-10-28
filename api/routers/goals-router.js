@@ -28,6 +28,7 @@ router.post(
   validateUserId,
   validateNewGoal,
   validateNewSteps,
+  // eslint-disable-next-line no-unused-vars
   (req, res, next) => {
     Goals.newGoal(req.params.user_id, req.body)
       .then((goal) => {
@@ -44,6 +45,7 @@ router.put(
   validateGoalId,
   validateEditGoal,
   validateEditSteps,
+  // eslint-disable-next-line no-unused-vars
   (req, res, next) => {
     Goals.editGoal(req.params.goal_id, req.body)
       .then((goal) => {
@@ -58,6 +60,7 @@ router.delete(
   "/delete-goal/:goal_id",
   restricted,
   validateGoalId,
+  // eslint-disable-next-line no-unused-vars
   (req, res, next) => {
     Goals.deleteGoal(req.params.goal_id)
       .then((deleted) => {
@@ -72,6 +75,7 @@ router.delete(
   "/delete-step/:step_id",
   restricted,
   validateStepId,
+  // eslint-disable-next-line no-unused-vars
   (req, res, next) => {
     Goals.deleteStep(req.params.step_id)
       .then((deleted) => {
