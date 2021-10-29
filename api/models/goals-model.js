@@ -46,8 +46,8 @@ async function getUserGoals(user_id) {
 
   const sharedGoal = (goalId) => {
     // all steps for a single goal
-    const steps = allSteps.filter((obj) => {
-      return obj.goal_id === goalId;
+    const steps = allSteps.filter((step) => {
+      return step.goal_id === goalId && step.step_id !== null;
     });
     const sortedSteps = steps.sort((a, b) => (a.step_id > b.step_id ? 1 : -1));
 
@@ -82,7 +82,7 @@ async function newGoal(user_id, goal) {
   );
 
   const newSteps = [];
-  if (steps != undefined) {
+  if (steps) {
     await Promise.all(
       steps.map(async (step) => {
         const [addedStep] = await db("steps").insert(
@@ -99,7 +99,7 @@ async function newGoal(user_id, goal) {
     user_id: addedGoal.user_id,
     goal_title: addedGoal.goal_title,
     goal_completed: addedGoal.goal_completed,
-    steps: newSteps.length > 0 ? newSteps : [],
+    steps: newSteps,
   };
 
   return userGoal;
