@@ -99,7 +99,7 @@ async function newGoal(user_id, goal) {
     user_id: addedGoal.user_id,
     goal_title: addedGoal.goal_title,
     goal_completed: addedGoal.goal_completed,
-    steps: newSteps.length > 0 ? newSteps : null,
+    steps: newSteps.length > 0 ? newSteps : [],
   };
 
   return userGoal;
