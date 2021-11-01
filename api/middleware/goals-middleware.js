@@ -93,7 +93,8 @@ const validateNewSteps = (req, res, next) => {
 };
 
 const validateEditGoal = (req, res, next) => {
-  const { goal_id, goal_title, goal_completed } = req.body;
+  const { goal_title, goal_completed } = req.body;
+  const { goal_id } = req.params;
   if ((goal_title || goal_completed) && goal_id === undefined) {
     res.json({
       status: 404,
