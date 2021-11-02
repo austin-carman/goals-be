@@ -154,11 +154,25 @@ async function editGoal(goal_id, goal) {
 }
 
 //Testing editSteps upsert
-async function updateSteps(steps) {
-  steps.forEach((step) => {
-    console.log("step: ", step);
-  });
-  return;
+async function updateSteps(goal_id, steps) {
+  const updatedSteps = [];
+  await Promise.all(
+    steps.map(async (step) => {
+      const [editedStep] = await db("steps")
+        .insert({
+          step_title: step.step_title,
+          step_completed: step.step_completed,
+          step_id: step.step_id,
+          goal_id: goal_id,
+        })
+        .onConflict("step_id")
+        .merge()
+        .returning("*");
+      updatedSteps.push(editedStep);
+    })
+  );
+
+  return updatedSteps;
 }
 
 // Testing editGoal upsert
@@ -174,8 +188,8 @@ async function updateGoal(goal_id, goal) {
     .merge()
     .returning("*");
 
-  updateSteps(goal.steps);
-
+  const editedSteps = await updateSteps(goal_id, goal.steps);
+  updatedGoal.steps = editedSteps;
   return updatedGoal;
 }
 
