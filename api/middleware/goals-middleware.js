@@ -121,60 +121,38 @@ const validateEditGoal = (req, res, next) => {
 };
 
 const validateEditSteps = (req, res, next) => {
-  if (req.body.steps === undefined) {
-    return next();
-  } else if (!Array.isArray(req.body.steps)) {
-    res.json({
-      status: 400,
-      message: "steps must be array of step object(s).",
+  const { steps } = req.body;
+  if (!steps || !Array.isArray(steps)) {
+    res.status(400).json({
+      message: "steps is required and must be of type array.",
     });
   }
 
-  req.body.steps.map((step) => {
+  steps.map((step) => {
+    // what to do about step_id??? -> skip for now
+    const { step_title, step_notes, step_completed } = step;
     if (
-      (step.step_title != undefined ||
-        step.step_notes != undefined ||
-        step.step_completed != undefined) &&
-      step.step_id === undefined
+      !step_title ||
+      step_notes === undefined ||
+      step_completed === undefined
     ) {
-      res.json({
-        status: 404,
+      res.status(404).json({
         message:
-          "step_id is required to make edits to step_title, step_notes, step_completed.",
+          "step_title, step_notes, step_completed are required. However, step_notes may have null value ",
       });
-    } else if (
-      step.step_id != undefined &&
-      step.step_title === undefined &&
-      step.step_notes === undefined &&
-      step.step_completed === undefined
-    ) {
-      res.json({
-        status: 400,
-        message:
-          "Must include editable property to edit step(s) (ie: step_title, step_notes, step_completed).",
-      });
-    } else if (
-      step.step_title != undefined &&
-      (typeof step.step_title != "string" || step.step_title === "")
-    ) {
-      res.json({
-        status: 404,
+    } else if (typeof step_title !== "string" || step_title === "") {
+      res.status(404).json({
         message: "step_title must be a non-empty string.",
       });
     } else if (
-      step.step_notes != undefined &&
-      (typeof step.step_notes != "string" || step.step_notes === "")
+      step_notes !== null &&
+      (typeof step_notes !== "string" || step_notes === "")
     ) {
-      res.json({
-        status: 404,
-        message: "step_notes must be a non-empty string.",
+      res.status(404).json({
+        message: "step_notes must either have value null or non-empty string.",
       });
-    } else if (
-      step.step_completed != undefined &&
-      typeof step.step_completed != "boolean"
-    ) {
-      res.json({
-        status: 404,
+    } else if (typeof step_completed != "boolean") {
+      res.status(404).json({
         message: "step_completed must be a boolean.",
       });
     }
