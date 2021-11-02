@@ -153,6 +153,14 @@ async function editGoal(goal_id, goal) {
   return userGoal;
 }
 
+//Testing editSteps upsert
+async function updateSteps(steps) {
+  steps.forEach((step) => {
+    console.log("step: ", step);
+  });
+  return;
+}
+
 // Testing editGoal upsert
 async function updateGoal(goal_id, goal) {
   const [updatedGoal] = await db("goals")
@@ -166,7 +174,7 @@ async function updateGoal(goal_id, goal) {
     .merge()
     .returning("*");
 
-  console.log("model: ", goal.steps);
+  updateSteps(goal.steps);
 
   return updatedGoal;
 }
