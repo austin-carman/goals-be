@@ -105,52 +105,54 @@ async function newGoal(user_id, goal) {
   return userGoal;
 }
 
-// Edit specified goal
-async function editGoal(goal_id, goal) {
+// Keeping for now. Will need to either utilize or remove
+// let userGoal = {};
+// if (updatedSteps.length > 0) {
+//   const sortedSteps = updatedSteps.sort((a, b) => {
+//     a.step_id > b.step_id ? 1 : -1;
+//   });
+//   userGoal = { ...updatedGoal, steps: sortedSteps };
+// }
+
+// Edit Step properties (called by updateGoal)
+async function updateSteps(goal_id, steps) {
   const updatedSteps = [];
-  if (goal.steps) {
-    const { steps } = goal;
-    await Promise.all(
-      steps.map(async (step) => {
-        const [editedStep] = await db("steps")
-          .where("step_id", step.step_id)
-          .update(
-            {
-              step_title: step.step_title,
-              step_notes: step.step_notes,
-              step_completed: step.step_completed,
-            },
-            ["step_id", "goal_id", "step_title", "step_notes", "step_completed"]
-          );
-        updatedSteps.push(editedStep);
-      })
-    );
-  }
+  await Promise.all(
+    steps.map(async (step) => {
+      const [editedStep] = await db("steps")
+        .insert({
+          step_title: step.step_title,
+          step_completed: step.step_completed,
+          step_notes: step.step_notes,
+          step_id: step.step_id,
+          goal_id: goal_id,
+        })
+        .onConflict("step_id")
+        .merge()
+        .returning("*");
+      updatedSteps.push(editedStep);
+    })
+  );
 
-  let updatedGoal = {};
-  if (goal.goal_title != undefined || goal.goal_completed != undefined) {
-    const { goal_title, goal_completed } = goal;
-    const [editedGoal] = await db("goals").where("goal_id", goal_id).update(
-      {
-        goal_title: goal_title,
-        goal_completed: goal_completed,
-      },
-      ["goal_id", "user_id", "goal_title", "goal_completed"]
-    );
-    updatedGoal = editedGoal;
-  }
+  return updatedSteps;
+}
 
-  let userGoal = {};
-  if (updatedSteps.length > 0) {
-    const sortedSteps = updatedSteps.sort((a, b) => {
-      a.step_id > b.step_id ? 1 : -1;
-    });
-    userGoal = { ...updatedGoal, steps: sortedSteps };
-  } else {
-    userGoal = updatedGoal;
-  }
+// Edit specific goal (calls updateSteps to update steps)
+async function updateGoal(goal_id, goal) {
+  const [updatedGoal] = await db("goals")
+    .insert({
+      goal_title: goal.goal_title,
+      goal_completed: goal.goal_completed,
+      goal_id: goal_id,
+      user_id: goal.user_id,
+    })
+    .onConflict("goal_id")
+    .merge()
+    .returning("*");
 
-  return userGoal;
+  const editedSteps = await updateSteps(goal_id, goal.steps);
+  updatedGoal.steps = editedSteps;
+  return updatedGoal;
 }
 
 // Delete specified goal and all associated steps
@@ -172,7 +174,7 @@ module.exports = {
   getStep,
   getUserGoals,
   newGoal,
-  editGoal,
+  updateGoal,
   deleteGoal,
   deleteStep,
 };

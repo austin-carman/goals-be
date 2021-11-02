@@ -38,16 +38,15 @@ router.post(
   }
 );
 
-// Edit existing specified goal
+// Testing: edit goal using upsert in model
 router.put(
   "/edit/:goal_id",
-  restricted,
   validateGoalId,
   validateEditGoal,
   validateEditSteps,
   // eslint-disable-next-line no-unused-vars
   (req, res, next) => {
-    Goals.editGoal(req.params.goal_id, req.body)
+    Goals.updateGoal(req.params.goal_id, req.body)
       .then((goal) => {
         res.json(goal);
       })
