@@ -162,6 +162,7 @@ async function updateSteps(goal_id, steps) {
         .insert({
           step_title: step.step_title,
           step_completed: step.step_completed,
+          step_notes: step.step_notes,
           step_id: step.step_id,
           goal_id: goal_id,
         })
