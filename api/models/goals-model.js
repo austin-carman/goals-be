@@ -153,6 +153,24 @@ async function editGoal(goal_id, goal) {
   return userGoal;
 }
 
+// Testing editGoal upsert
+async function updateGoal(goal_id, goal) {
+  const [updatedGoal] = await db("goals")
+    .insert({
+      goal_title: goal.goal_title,
+      goal_completed: goal.goal_completed,
+      goal_id: goal_id,
+      user_id: 1,
+    })
+    .onConflict("goal_id")
+    .merge()
+    .returning("*");
+
+  console.log("model: ", goal.steps);
+
+  return updatedGoal;
+}
+
 // Delete specified goal and all associated steps
 async function deleteGoal(goal_id) {
   const goal = await db("goals").where("goal_id", goal_id).del([]);
@@ -173,6 +191,7 @@ module.exports = {
   getUserGoals,
   newGoal,
   editGoal,
+  updateGoal,
   deleteGoal,
   deleteStep,
 };

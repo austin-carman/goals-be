@@ -195,6 +195,23 @@ const validateEditSteps = (req, res, next) => {
   next();
 };
 
+const editGoalValidation = (req, res, next) => {
+  /*
+  1. req.body will be the edited goal
+    - may contain the following goal properties:
+      - goal_title, goal_completed, steps
+      - step_title, step_notes, step_completed
+  2. req.params will contain the goal_id
+  3. verify that goal_title and step_title (if applicable) are not undefined
+  4. Verify that all necessary primary keys are present to update in db
+    - goal_id -> comes from req.params 
+    - if steps exist -> check if steps.length > 0
+      - step_id -> comes from req.body (only exists for pre-existing steps)
+  */
+
+  next();
+};
+
 module.exports = {
   validateUserId,
   validateGoalId,
@@ -203,4 +220,5 @@ module.exports = {
   validateNewSteps,
   validateEditGoal,
   validateEditSteps,
+  editGoalValidation,
 };
