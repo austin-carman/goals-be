@@ -105,55 +105,16 @@ async function newGoal(user_id, goal) {
   return userGoal;
 }
 
-// Edit specified goal
-async function editGoal(goal_id, goal) {
-  const updatedSteps = [];
-  if (goal.steps) {
-    const { steps } = goal;
-    await Promise.all(
-      steps.map(async (step) => {
-        const [editedStep] = await db("steps")
-          .where("step_id", step.step_id)
-          .update(
-            {
-              step_title: step.step_title,
-              step_notes: step.step_notes,
-              step_completed: step.step_completed,
-            },
-            ["step_id", "goal_id", "step_title", "step_notes", "step_completed"]
-          );
-        updatedSteps.push(editedStep);
-      })
-    );
-  }
+// Keeping for now. Will need to either utilize or remove
+// let userGoal = {};
+// if (updatedSteps.length > 0) {
+//   const sortedSteps = updatedSteps.sort((a, b) => {
+//     a.step_id > b.step_id ? 1 : -1;
+//   });
+//   userGoal = { ...updatedGoal, steps: sortedSteps };
+// }
 
-  let updatedGoal = {};
-  if (goal.goal_title != undefined || goal.goal_completed != undefined) {
-    const { goal_title, goal_completed } = goal;
-    const [editedGoal] = await db("goals").where("goal_id", goal_id).update(
-      {
-        goal_title: goal_title,
-        goal_completed: goal_completed,
-      },
-      ["goal_id", "user_id", "goal_title", "goal_completed"]
-    );
-    updatedGoal = editedGoal;
-  }
-
-  let userGoal = {};
-  if (updatedSteps.length > 0) {
-    const sortedSteps = updatedSteps.sort((a, b) => {
-      a.step_id > b.step_id ? 1 : -1;
-    });
-    userGoal = { ...updatedGoal, steps: sortedSteps };
-  } else {
-    userGoal = updatedGoal;
-  }
-
-  return userGoal;
-}
-
-//Testing editSteps upsert
+// Edit Step properties (called by updateGoal)
 async function updateSteps(goal_id, steps) {
   const updatedSteps = [];
   await Promise.all(
@@ -176,7 +137,7 @@ async function updateSteps(goal_id, steps) {
   return updatedSteps;
 }
 
-// Testing editGoal upsert
+// Edit specific goal (calls updateSteps to update steps)
 async function updateGoal(goal_id, goal) {
   const [updatedGoal] = await db("goals")
     .insert({
@@ -213,7 +174,6 @@ module.exports = {
   getStep,
   getUserGoals,
   newGoal,
-  editGoal,
   updateGoal,
   deleteGoal,
   deleteStep,
