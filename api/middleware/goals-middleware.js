@@ -93,39 +93,27 @@ const validateNewSteps = (req, res, next) => {
 };
 
 const validateEditGoal = (req, res, next) => {
-  const { goal_title, goal_completed } = req.body;
+  const { user_id, goal_title, goal_completed } = req.body;
   const { goal_id } = req.params;
-  if ((goal_title || goal_completed) && goal_id === undefined) {
-    res.json({
-      status: 404,
-      message:
-        "goal_id is required to make edits to goal_title and goal_completed.",
+  if (!goal_id) {
+    res.status(400).json({
+      message: "goal_id parameter is required to edit goal.",
     });
-  } else if (
-    goal_id != undefined &&
-    goal_title === undefined &&
-    goal_completed === undefined
-  ) {
-    res.json({
-      status: 200,
-      message:
-        "Must include editable properties with goal_id (ie: goal_title or goal_completed).",
+  } else if (!goal_title || goal_completed === undefined || !user_id) {
+    res.status(400).json({
+      message: "goal_title, goal_completed, user_id are required.",
     });
-  } else if (
-    goal_title != undefined &&
-    (typeof goal_title != "string" || goal_title === "")
-  ) {
-    res.json({
-      status: 404,
+  } else if (typeof goal_title !== "string" || goal_title === "") {
+    res.status(400).json({
       message: "goal_title must be a non-empty string.",
     });
-  } else if (
-    goal_completed != undefined &&
-    typeof goal_completed != "boolean"
-  ) {
-    res.json({
-      status: 404,
+  } else if (typeof goal_completed !== "boolean") {
+    res.status(400).json({
       message: "goal_completed must be a boolean.",
+    });
+  } else if (typeof user_id !== "number") {
+    res.status(400).json({
+      message: "user_id must be a number.",
     });
   }
 

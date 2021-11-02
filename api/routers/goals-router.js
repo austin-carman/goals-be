@@ -10,6 +10,7 @@ const {
   // validateEditGoal,
   // validateEditSteps,
   editGoalValidation,
+  validateEditGoal,
 } = require("../middleware/goals-middleware");
 
 // Get all goals for specified user
@@ -55,9 +56,12 @@ router.post(
 //       .catch((err) => console.log(err));
 //   }
 // );
+
 // Testing: edit goal using upsert in model
 router.put(
   "/edit/:goal_id",
+  validateGoalId,
+  validateEditGoal,
   editGoalValidation,
   // eslint-disable-next-line no-unused-vars
   (req, res, next) => {

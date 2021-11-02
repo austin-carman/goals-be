@@ -182,7 +182,7 @@ async function updateGoal(goal_id, goal) {
       goal_title: goal.goal_title,
       goal_completed: goal.goal_completed,
       goal_id: goal_id,
-      user_id: 1,
+      user_id: goal.user_id,
     })
     .onConflict("goal_id")
     .merge()
