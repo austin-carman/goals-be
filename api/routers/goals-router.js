@@ -7,10 +7,8 @@ const {
   validateStepId,
   validateNewGoal,
   validateNewSteps,
-  // validateEditGoal,
-  // validateEditSteps,
-  editGoalValidation,
   validateEditGoal,
+  validateEditSteps,
 } = require("../middleware/goals-middleware");
 
 // Get all goals for specified user
@@ -62,7 +60,7 @@ router.put(
   "/edit/:goal_id",
   validateGoalId,
   validateEditGoal,
-  editGoalValidation,
+  validateEditSteps,
   // eslint-disable-next-line no-unused-vars
   (req, res, next) => {
     Goals.updateGoal(req.params.goal_id, req.body)
