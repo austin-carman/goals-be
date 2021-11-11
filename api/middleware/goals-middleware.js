@@ -144,12 +144,9 @@ const validateEditSteps = (req, res, next) => {
       res.status(404).json({
         message: "step_title must be a non-empty string.",
       });
-    } else if (
-      step_notes !== null &&
-      (typeof step_notes !== "string" || step_notes === "")
-    ) {
+    } else if (step_notes !== null && typeof step_notes !== "string") {
       res.status(404).json({
-        message: "step_notes must either have value null or non-empty string.",
+        message: "step_notes must be of type string.",
       });
     } else if (typeof step_completed != "boolean") {
       res.status(404).json({
