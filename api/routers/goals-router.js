@@ -38,7 +38,7 @@ router.post(
   }
 );
 
-// Testing: edit goal using upsert in model
+// Edit Goal (upsert)
 router.put(
   "/edit/:goal_id",
   validateGoalId,

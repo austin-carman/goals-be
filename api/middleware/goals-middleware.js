@@ -55,9 +55,9 @@ const validateNewGoal = (req, res, next) => {
       status: 404,
       message: "goal_title is required and must be a string.",
     });
+  } else {
+    next();
   }
-
-  next();
 };
 
 const validateNewSteps = (req, res, next) => {
@@ -69,27 +69,26 @@ const validateNewSteps = (req, res, next) => {
       status: 400,
       message: "steps must be array of step objects.",
     });
+  } else {
+    steps.map((step) => {
+      if (!step.step_title) {
+        res.json({
+          status: 404,
+          message:
+            "step_title is required in step object and must be a non-empty string.",
+        });
+      } else if (
+        step.step_completed !== undefined &&
+        typeof step.step_completed != "boolean"
+      ) {
+        res.json({
+          status: 404,
+          message: "step_completed must be a boolean.",
+        });
+      }
+    });
+    next();
   }
-
-  steps.map((step) => {
-    if (!step.step_title) {
-      res.json({
-        status: 404,
-        message:
-          "step_title is required in step object and must be a non-empty string.",
-      });
-    } else if (
-      step.step_completed !== undefined &&
-      typeof step.step_completed != "boolean"
-    ) {
-      res.json({
-        status: 404,
-        message: "step_completed must be a boolean.",
-      });
-    }
-  });
-
-  next();
 };
 
 const validateEditGoal = (req, res, next) => {
