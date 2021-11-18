@@ -85,9 +85,10 @@ const validateNewSteps = (req, res, next) => {
           status: 404,
           message: "step_completed must be a boolean.",
         });
+      } else {
+        next();
       }
     });
-    next();
   }
 };
 
