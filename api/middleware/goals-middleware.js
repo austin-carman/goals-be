@@ -63,7 +63,7 @@ const validateNewGoal = (req, res, next) => {
 const validateNewSteps = (req, res, next) => {
   const { steps } = req.body;
   if (steps === []) {
-    return next();
+    next();
   } else if (!Array.isArray(steps)) {
     res.json({
       status: 400,
@@ -85,9 +85,10 @@ const validateNewSteps = (req, res, next) => {
         status: 404,
         message: "step_completed must be a boolean.",
       });
+    } else {
+      next();
     }
   });
-  next();
 };
 
 const validateEditGoal = (req, res, next) => {
