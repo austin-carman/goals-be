@@ -50,7 +50,7 @@ const validateStepId = (req, res, next) => {
 };
 
 const validateNewGoal = (req, res, next) => {
-  if (!req.body.goal_title || typeof req.body.goal_title != "string") {
+  if (!req.body.goal_title || typeof req.body.goal_title !== "string") {
     res.json({
       status: 404,
       message: "goal_title is required and must be a string.",
@@ -62,33 +62,26 @@ const validateNewGoal = (req, res, next) => {
 
 const validateNewSteps = (req, res, next) => {
   const { steps } = req.body;
-  if (steps === []) {
-    next();
-  } else if (!Array.isArray(steps)) {
+  if (!Array.isArray(steps)) {
     res.json({
       status: 400,
-      message: "steps must be array of step objects.",
+      message: "steps must be an array.",
     });
+  } else if (steps.length === 0) {
+    next();
+  } else {
+    steps.map((step) => {
+      if (!step.step_title || typeof step.step_title !== "string") {
+        res.json({
+          status: 404,
+          message:
+            "step_title is required in step object and must be a non-empty string.",
+        });
+        return;
+      }
+    });
+    next();
   }
-  steps.map((step) => {
-    if (!step.step_title) {
-      res.json({
-        status: 404,
-        message:
-          "step_title is required in step object and must be a non-empty string.",
-      });
-    } else if (
-      step.step_completed !== undefined &&
-      typeof step.step_completed != "boolean"
-    ) {
-      res.json({
-        status: 404,
-        message: "step_completed must be a boolean.",
-      });
-    } else {
-      next();
-    }
-  });
 };
 
 const validateEditGoal = (req, res, next) => {
