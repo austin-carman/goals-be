@@ -8,6 +8,7 @@ exports.seed = function (knex) {
         {
           goal_id: 1,
           step_title: "Pick 12 books to read",
+          step_notes: "",
           step_completed: true,
         },
         {
@@ -25,12 +26,14 @@ exports.seed = function (knex) {
         {
           goal_id: 1,
           step_title: "Meet with book club once/week to discuss chapters read",
+          step_notes: "",
           step_completed: false,
         },
         {
           goal_id: 2,
           step_title:
             "Calculate how much is being spent each month in each category",
+          step_notes: "",
           step_completed: false,
         },
         {
@@ -43,6 +46,7 @@ exports.seed = function (knex) {
         {
           goal_id: 2,
           step_title: "Put $100 into savings each paycheck",
+          step_notes: "",
           step_completed: false,
         },
       ]);
