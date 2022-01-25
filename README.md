@@ -1,8 +1,8 @@
 ## API Endpoint Documentation
 ### User Router
-BaseURL: 
+BaseURL: https://goalmanager.herokuapp.com/api/
 #### Login for existing user
-[POST] /api/user/login
+[POST] BaseURL/user/login
 Parameter: none
 Request body: 
   - Required: 
@@ -23,7 +23,7 @@ Response:
   }
 
 #### Register new user
-[POST] /api/user/register
+[POST] BaseURL/user/register
 Parameter: none
 Request body: 
   - Required:
@@ -49,7 +49,7 @@ Response:
 
 ### Goals
 #### Get all goals for specified user
-[GET] /api/goals/:user_id
+[GET] BaseURL/goals/:user_id
 Parameter: user_id
 Request body: none
 Response:
@@ -95,7 +95,7 @@ Response:
   ]
 
 #### Create new goal, with or without steps, for specified user
-[POST] /api/goals/new-goal/:user_id
+[POST] BaseURL/goals/new-goal/:user_id
 Parameter: user_id
 Request body: 
   - Required: 
@@ -163,7 +163,7 @@ Response:
   }
 
 #### Edit specified goal and/or it's associated steps
-[PUT] /api/goals/edit/:goal_id
+[PUT] BaseURl/goals/edit/:goal_id
 Parameter: goal_id
 Request body:
   - Required:
@@ -293,7 +293,7 @@ Response:
   }
 
 #### Delete specified goal and all associated steps
-[DELETE] /delete-goal/:goal_id
+[DELETE] BaseURL/goals/delete-goal/:goal_id
 Parameter: goal_id
 Request body: none
 Response: Number of deleted goals
@@ -301,42 +301,10 @@ Response: Number of deleted goals
     - 1
 
 #### Delete specified step
-[DELETE] /delete-step/:step_id
+[DELETE] BaseURL/goals/delete-step/:step_id
 Parameter: step_id
 Request body: none
 Response: Number of deleted steps
   - Example: 1 step deleted:
     - 1
 
-
-
-**The following scripts NEED TO BE EDITED before using: replace `YOUR_HEROKU_APP_NAME`**
-
-- **migrateh**: Migrates the Heroku database to the latest.
-- **rollbackh**: Rolls back migrations in the Heroku database.
-- **databaseh**: Interact with the Heroku database from the command line using psql.
-- **seedh**: Runs all seeds in the Heroku database.
-
-## Hot Tips
-
-- Figure out the connection to the database and deployment before writing any code.
-
-- If you need to make changes to a migration file that has already been released to Heroku, follow this sequence:
-
-  1. Roll back migrations in the Heroku database
-  2. Deploy the latest code to Heroku
-  3. Migrate the Heroku database to the latest
-
-- If your frontend devs are clear on the shape of the data they need, you can quickly build provisional endpoints that return mock data. They shouldn't have to wait for you to build the entire backend.
-
-- Keep your endpoints super lean: the bulk of the code belongs inside models and other middlewares.
-
-- Validating and sanitizing client data using a library is much less work than doing it manually.
-
-- Revealing crash messages to clients is a security risk, but during development it's helpful if your frontend devs are able to tell you what crashed.
-
-- PostgreSQL comes with [fantastic built-in functions](https://hashrocket.com/blog/posts/faster-json-generation-with-postgresql) for hammering rows into whatever JSON shape.
-
-- If you want to edit a migration that has already been released but don't want to lose all the data, make a new migration instead. This is a more realistic flow for production apps: prod databases are never migrated down. We can migrate Heroku down freely only because there's no valuable data from customers in it. In this sense, Heroku is acting more like a staging environment than production.
-
-- If your fronted devs are interested in running the API locally, help them set up PostgreSQL & pgAdmin in their machines, and teach them how to run migrations in their local. This empowers them to (1) help you troubleshoot bugs, (2) obtain the latest code by simply doing `git pull` and (3) work with their own data, without it being wiped every time you roll back the Heroku db. Collaboration is more fun and direct, and you don't need to deploy as often.
