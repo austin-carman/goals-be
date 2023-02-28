@@ -9,7 +9,20 @@ const goalsRouter = require("./routers/goals-router");
 const server = express();
 server.use(express.json());
 server.use(helmet());
-server.use(cors());
+// server.use(cors());
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "https://goals-fe.vercel.app",
+  ],
+  "Access-Control-Allow-Origin": [
+    "http://localhost:3000",
+    "https://goals-fe.vercel.app",
+  ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+server.use(cors(corsOptions));
 
 // Routes
 server.use("/api/user", userRouter);
