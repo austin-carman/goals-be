@@ -26,7 +26,7 @@ server.get("*", (req, res) => {
 });
 
 // Error Handler
-server.use((err, req, res, next) => {
+server.use((err, req, res) => {
   res.json({
     status: 500,
     message: err.message,
